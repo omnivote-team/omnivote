@@ -1,9 +1,14 @@
+import MainLayout from "./layouts/MainLayout";
+import LoginPage from "./pages/LoginPage";
+import DashboardPage from "./pages/DashboardPage";
+
 function App() {
   return (
-    <div>
+    <MainLayout>
       <h1>OmniVote</h1>
-      <p>Frontend base app is ready.</p>
-    </div>
+      <LoginPage />
+      <DashboardPage />
+    </MainLayout>
   );
 }
 
