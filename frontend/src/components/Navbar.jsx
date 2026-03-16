@@ -1,8 +1,13 @@
 function Navbar() {
   return (
-    <nav>
-      <p>OmniVote Navbar</p>
-    </nav>
+    <header className="top-navbar">
+      <div className="logo">OmniVote</div>
+
+      <nav className="nav-links">
+        <a href="#">Elections</a>
+        <a href="#">Login</a>
+      </nav>
+    </header>
   );
 }
 

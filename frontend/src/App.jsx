@@ -1,15 +1,8 @@
-import MainLayout from "./layouts/MainLayout";
-import LoginPage from "./pages/LoginPage";
-import DashboardPage from "./pages/DashboardPage";
+import "./App.css";
+import ElectionListPage from "./pages/ElectionListPage";
 
 function App() {
-  return (
-    <MainLayout>
-      <h1>OmniVote</h1>
-      <LoginPage />
-      <DashboardPage />
-    </MainLayout>
-  );
+  return <ElectionListPage />;
 }
 
 export default App;
