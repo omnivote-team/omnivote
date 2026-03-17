@@ -1,3 +1,9 @@
+/* =========================================================
+   ROOT + GLOBAL RESET
+   These rules make the app take full width and remove the
+   browser's default spacing so our layout stays consistent.
+   ========================================================= */
+
 #root {
   width: 100%;
   max-width: none;
@@ -11,6 +17,7 @@
   box-sizing: border-box;
 }
 
+/* Main page defaults used across the app */
 body {
   font-family: Arial, sans-serif;
   background: #0b1020;
@@ -23,57 +30,13 @@ a {
   color: inherit;
 }
 
-.election-list-page {
-  position: relative;
-  min-height: 100vh;
-  width: 100%;
-  background:
-    radial-gradient(circle at 20% 20%, rgba(56, 189, 248, 0.12), transparent 20%),
-    radial-gradient(circle at 80% 25%, rgba(168, 85, 247, 0.12), transparent 22%),
-    radial-gradient(circle at 50% 80%, rgba(34, 211, 238, 0.1), transparent 24%),
-    linear-gradient(180deg, #070b16 0%, #0b1020 45%, #0f172a 100%);
-  overflow: hidden;
-}
+/* =========================================================
+   NAVBAR
+   Sticky header that stays at the top while scrolling.
+   Slight blur + dark transparent background gives a modern
+   glass effect without making it too flashy.
+   ========================================================= */
 
-.election-list-page::before,
-.election-list-page::after {
-  content: "";
-  position: absolute;
-  width: 700px;
-  height: 700px;
-  border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.28;
-  animation: floatGlow 14s ease-in-out infinite;
-  z-index: 0;
-}
-
-.election-list-page::before {
-  background: #2563eb;
-  top: -180px;
-  left: -180px;
-}
-
-.election-list-page::after {
-  background: #7c3aed;
-  right: -220px;
-  top: 120px;
-  animation-delay: 3s;
-}
-
-@keyframes floatGlow {
-  0% {
-    transform: translate(0, 0) scale(1);
-  }
-  50% {
-    transform: translate(40px, 50px) scale(1.08);
-  }
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-}
-
-/* Navbar */
 .top-navbar {
   position: sticky;
   top: 0;
@@ -88,6 +51,8 @@ a {
 }
 
 .logo {
+  display: flex;
+  align-items: center;
   font-size: 30px;
   font-weight: 700;
   color: #f8fbff;
@@ -107,12 +72,88 @@ a {
   color: #7dd3fc;
 }
 
-/* Hero */
+/* =========================================================
+   HERO SECTION
+   This is the "Welcome to OmniVote" section on the dashboard.
+   We keep it centered, large, and premium looking.
+   The glow layers make it feel alive without using images.
+   ========================================================= */
+
 .hero-section {
   position: relative;
   z-index: 1;
   text-align: center;
   padding: 120px 20px 90px;
+  overflow: hidden;
+}
+
+/* Make sure actual hero content stays above all background glow layers */
+.hero-section > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Blue glow on one side */
+.hero-section::before,
+.hero-section::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  z-index: 0;
+  opacity: 0.5;
+  animation: heroGlowMove 10s ease-in-out infinite;
+}
+
+.hero-section::before {
+  width: 320px;
+  height: 320px;
+  background: rgba(56, 189, 248, 0.22);
+  top: 10%;
+  left: 18%;
+}
+
+/* Warm glow on the other side for a subtle "sunny" feeling */
+.hero-section::after {
+  width: 360px;
+  height: 360px;
+  background: rgba(250, 204, 21, 0.16);
+  top: 0%;
+  right: 18%;
+  animation-delay: 2s;
+}
+
+/* Central golden glow behind the heading */
+.hero-glow-orb {
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  background: rgba(251, 191, 36, 0.14);
+  filter: blur(110px);
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 0;
+  animation: heroGlowPulse 8s ease-in-out infinite;
+}
+
+/* This extra layer helps the hero blend into the section below it
+   so the transition does not feel like a hard cut. */
+.hero-bottom-fade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 140px;
+  background: linear-gradient(
+    to bottom,
+    rgba(8, 17, 32, 0) 0%,
+    rgba(8, 17, 32, 0.45) 55%,
+    rgba(8, 17, 32, 0.92) 100%
+  );
+  z-index: 1;
+  pointer-events: none;
 }
 
 .hero-section h1 {
@@ -131,6 +172,7 @@ a {
   margin: 0 auto 38px;
 }
 
+/* Hero action buttons */
 .hero-buttons {
   display: flex;
   justify-content: center;
@@ -158,6 +200,7 @@ a {
   border-color: rgba(125, 211, 252, 0.45);
 }
 
+/* Main CTA button */
 .hero-buttons button:first-child {
   background: linear-gradient(135deg, #38bdf8, #2563eb);
   border: none;
@@ -167,16 +210,54 @@ a {
   background: linear-gradient(135deg, #4cc9ff, #326cff);
 }
 
-/* Features */
+/* =========================================================
+   ANIMATIONS USED BY HERO GLOWS
+   Slow movement keeps the page lively but not distracting.
+   ========================================================= */
+
+@keyframes heroGlowMove {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(20px, 18px) scale(1.08);
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+@keyframes heroGlowPulse {
+  0% {
+    transform: translateX(-50%) scale(1);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translateX(-50%) scale(1.08);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateX(-50%) scale(1);
+    opacity: 0.35;
+  }
+}
+
+/* =========================================================
+   FEATURES SECTION
+   The three feature cards under the hero section.
+   We pull it slightly upward so it visually blends better
+   with the hero section above.
+   ========================================================= */
+
 .features-section {
   position: relative;
   z-index: 1;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 28px;
-  padding: 40px 70px 50px;
+  padding: 0 70px 50px;
   max-width: 1300px;
-  margin: 0 auto;
+  margin: -18px auto 0;
 }
 
 .feature-card {
@@ -187,6 +268,14 @@ a {
   border-radius: 24px;
   box-shadow: 0 14px 40px rgba(0, 0, 0, 0.24);
   text-align: center;
+}
+
+.feature-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 18px;
+  color: #7dd3fc;
 }
 
 .feature-card h3 {
@@ -201,7 +290,11 @@ a {
   line-height: 1.6;
 }
 
-/* Elections Section */
+/* =========================================================
+   DASHBOARD ELECTION PREVIEW SECTION
+   This is the small ongoing election preview shown on home.
+   ========================================================= */
+
 .ongoing-elections-section {
   position: relative;
   z-index: 1;
@@ -234,26 +327,31 @@ a {
   gap: 28px;
 }
 
-.election-list-container {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 28px;
-}
+/* =========================================================
+   SHARED ELECTION CARD
+   Used on dashboard preview and election listing page.
+   ========================================================= */
 
 .election-card {
   position: relative;
-  background: rgba(15, 23, 42, 0.62);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(18px);
-  border-radius: 24px;
+  background: rgba(10, 18, 34, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 22px;
   padding: 28px;
-  min-height: 240px;
-  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.24);
+  min-height: 230px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
   color: #e8eefc;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   text-align: left;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.election-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(96, 165, 250, 0.18);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
 }
 
 .status-badge {
@@ -302,10 +400,242 @@ a {
   opacity: 0.92;
 }
 
-/* Responsive */
+/* =========================================================
+   ELECTION LIST PAGE
+   This page uses the same dark theme, but the structure is
+   more app-like: heading, tabs, filters, then cards.
+   ========================================================= */
+
+.election-list-page {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(37, 99, 235, 0.10), transparent 22%),
+    radial-gradient(circle at 82% 22%, rgba(124, 58, 237, 0.10), transparent 24%),
+    linear-gradient(180deg, #081120 0%, #0a1324 55%, #0d1630 100%);
+  overflow: hidden;
+  color: #e8eefc;
+  padding-bottom: 80px;
+}
+
+.election-list-page::before,
+.election-list-page::after {
+  content: "";
+  position: absolute;
+  width: 520px;
+  height: 520px;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.16;
+  z-index: 0;
+}
+
+.election-list-page::before {
+  background: #2563eb;
+  top: -140px;
+  left: -140px;
+}
+
+.election-list-page::after {
+  background: #7c3aed;
+  right: -160px;
+  top: 80px;
+}
+
+/* This wrapper keeps the page content from becoming too narrow
+   or too stretched on wide screens. */
+.election-list-inner {
+  max-width: 1580px;
+  margin: 0 auto;
+  padding: 0 36px;
+}
+
+/* Heading on election listing page */
+.election-list-header {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 48px 20px 18px;
+}
+
+.election-list-header h1 {
+  font-size: 54px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 8px;
+  line-height: 1.1;
+}
+
+.election-list-header p {
+  font-size: 17px;
+  color: #c7d7ff;
+}
+
+/* Tabs for Ongoing / Upcoming / Past */
+.election-tabs {
+  display: flex;
+  gap: 10px;
+  margin: 18px 0 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.election-tabs button {
+  padding: 10px 18px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  color: #dbe7ff;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.election-tabs button:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.active-tab {
+  background: rgba(59, 130, 246, 0.18);
+  color: #ffffff;
+  border-color: rgba(96, 165, 250, 0.35);
+}
+
+/* Outer wrapper for the whole filter row */
+.election-filters {
+  position: relative;
+  z-index: 1;
+  margin: 0 0 28px;
+}
+
+/* Inner filter panel that groups all three controls together */
+.filters-panel {
+  position: relative;
+  z-index: 1;
+  margin: 0 0 24px;
+  padding: 14px 16px;
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  align-items: center;
+  background: rgba(9, 18, 34, 0.58);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+}
+
+/* Search input */
+.election-filters input {
+  flex: 1;
+  min-width: 320px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  color: #e8eefc;
+  font-size: 15px;
+  outline: none;
+}
+
+.election-filters input::placeholder {
+  color: #94a3b8;
+}
+
+/* Select dropdowns */
+.election-filters select {
+  width: 220px;
+  padding: 14px 44px 14px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  color: #e8eefc;
+  font-size: 15px;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 14px;
+}
+
+/* Native dropdown options are controlled partly by the OS/browser,
+   but this at least keeps text readable when the list opens. */
+.election-filters option {
+  color: #111827;
+}
+
+/* Grid for election list cards */
+.election-cards-container {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(320px, 460px));
+  gap: 24px;
+  padding: 6px 0 40px;
+  justify-content: start;
+}
+
+/* No results state when filters do not match anything */
+.no-results-layout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 55vh;
+  padding: 0;
+}
+
+.no-elections-state {
+  width: 100%;
+  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+  margin: 0 auto;
+}
+
+.no-elections-icon {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.18), rgba(37, 99, 235, 0.18));
+  border: 1px solid rgba(125, 211, 252, 0.22);
+  box-shadow: 0 10px 30px rgba(37, 99, 235, 0.18);
+  font-size: 38px;
+  margin-bottom: 18px;
+}
+
+.no-elections-state h3 {
+  font-size: 28px;
+  color: #ffffff;
+  margin-bottom: 10px;
+}
+
+.no-elections-state p {
+  max-width: 420px;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #94a3b8;
+}
+
+/* =========================================================
+   RESPONSIVE RULES
+   These help the app stay usable on tablets and smaller widths.
+   ========================================================= */
+
 @media (max-width: 992px) {
   .features-section,
-  .election-list-container {
+  .election-list-container,
+  .election-cards-container {
     grid-template-columns: 1fr;
   }
 
@@ -326,5 +656,15 @@ a {
 
   .hero-section p {
     font-size: 18px;
+  }
+
+  .election-list-inner {
+    padding: 0 24px;
+  }
+
+  .election-filters input,
+  .election-filters select {
+    width: 100%;
+    min-width: 100%;
   }
 }

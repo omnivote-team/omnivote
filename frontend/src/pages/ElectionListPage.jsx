@@ -1,47 +1,79 @@
-import Navbar from "../components/Navbar";
-import HeroSection from "../components/HeroSection";
-import FeatureCard from "../components/FeatureCard";
+import React, { useState } from "react";
 import ElectionCard from "../components/ElectionCard";
-import mockFeatures from "../data/mockFeatures";
 import mockElections from "../data/mockElections";
+import ElectionTabs from "../components/ElectionTabs";
+import ElectionFilters from "../components/ElectionFilters";
+import EmptyState from "../components/EmptyState";
 
-function ElectionListPage() {
+const ElectionListPage = () => {
+  const [activeTab, setActiveTab] = useState("ongoing");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedOrganization, setSelectedOrganization] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+
+  const organizations = [
+    ...new Set(mockElections.map((election) => election.organization)),
+  ];
+
+  const categories = [
+    ...new Set(mockElections.map((election) => election.category)),
+  ];
+
+  const filteredElections = mockElections.filter((election) => {
+    const matchesTab = election.status.toLowerCase() === activeTab;
+    const matchesSearch = election.title
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+    const matchesOrganization =
+      selectedOrganization === "" ||
+      election.organization === selectedOrganization;
+    const matchesCategory =
+      selectedCategory === "" ||
+      election.category === selectedCategory;
+
+    return (
+      matchesTab &&
+      matchesSearch &&
+      matchesOrganization &&
+      matchesCategory
+    );
+  });
+
   return (
     <div className="election-list-page">
-      <Navbar />
+      <div className="election-list-inner">
+        <section className="election-list-header">
+          <h1>Browse Elections</h1>
+          <p>Explore ongoing, upcoming, and past elections.</p>
+        </section>
 
-      <HeroSection />
+       <ElectionTabs activeTab={activeTab} setActiveTab={setActiveTab} />
 
-      <section className="features-section">
-        {mockFeatures.map((feature) => (
-          <FeatureCard
-            key={feature.id}
-            title={feature.title}
-            description={feature.description}
-          />
+       <ElectionFilters
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        selectedOrganization={selectedOrganization}
+        setSelectedOrganization={setSelectedOrganization}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+        organizations={organizations}
+        categories={categories}
+        />
+
+  {filteredElections.length > 0 ? (
+    <div className="election-cards-container">
+        {filteredElections.map((election) => (
+          <ElectionCard key={election.id} election={election} />
         ))}
-      </section>
-
-      <section className="ongoing-elections-section">
-        <div className="section-header">
-          <h2>Ongoing Elections</h2>
-          <a href="#">View All</a>
-        </div>
-
-        <div className="election-list-container">
-          {mockElections.map((election) => (
-            <ElectionCard
-              key={election.id}
-              title={election.title}
-              organization={election.organization}
-              status={election.status}
-              dates={election.dates}
-            />
-          ))}
-        </div>
-      </section>
+      </div>
+    ) : (
+      <div className="election-cards-container no-results-layout">
+        <EmptyState />
+      </div>
+  )}
+      </div>
     </div>
   );
-}
+};
 
 export default ElectionListPage;
