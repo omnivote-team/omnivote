@@ -1,10 +1,13 @@
+import OmniVoteLogo from "./OmniVoteLogo";
 function Navbar() {
   return (
     <header className="top-navbar">
-      <div className="logo">OmniVote</div>
+      <a href="/" className="logo">
+        <OmniVoteLogo size={40} showText={true} />
+      </a>
 
       <nav className="nav-links">
-        <a href="#">Elections</a>
+        <a href="/elections">Elections</a>
         <a href="#">Login</a>
       </nav>
     </header>
