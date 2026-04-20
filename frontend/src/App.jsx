@@ -1,7 +1,12 @@
-import "./App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import DashboardPage from "./pages/DashboardPage";
-import ElectionListPage from "./pages/ElectionListPage";
+import { BrowserRouter, Routes, Route } from "react-router-dom"
+import DashboardPage from "./pages/DashboardPage"
+import ElectionListPage from "./pages/ElectionListPage"
+import LoginPage from "./pages/LoginPage"
+import SignupPage from "./pages/SignupPage";
+import UserHomePage from "./pages/UserHomePage";
+import UserProfilePage from "./pages/UserProfilePage";
+import UserElectionListPage from "./pages/UserElectionListPage";
+import "./App.css"
 
 function App() {
   return (
@@ -9,9 +14,15 @@ function App() {
       <Routes>
         <Route path="/" element={<DashboardPage />} />
         <Route path="/elections" element={<ElectionListPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/user-home" element={<UserHomePage />} />
+        <Route path="/profile" element={<UserProfilePage />} />
+        <Route path="/dashboard" element={<UserHomePage />} />
+        <Route path="/user-elections" element={<UserElectionListPage />} />
       </Routes>
     </BrowserRouter>
-  );
+  )
 }
 
-export default App;
+export default App
