@@ -42,7 +42,7 @@ function DashboardPage() {
                 dates={election.dates}
               />
             ))}
-        </div>
+      </div>
       </section>
     </div>
   );

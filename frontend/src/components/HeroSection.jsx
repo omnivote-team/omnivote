@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom";
 
 function HeroSection() {
   const navigate = useNavigate();
-
   return (
     <section className="hero-section">
       <div className="hero-glow-orb"></div>
@@ -15,13 +14,15 @@ function HeroSection() {
       </p>
 
       <div className="hero-buttons">
-        <button onClick={() => navigate("/elections")}>
-          Browse Elections
-        </button>
+        <a href="/elections">
+          <button>
+            Browse Elections
+          </button>
+        </a>
 
-        <button>
-          Get Started
-        </button>
+      <button onClick={() => navigate("/login")}>
+        Get Started
+      </button>
       </div>
 
       <div className="hero-bottom-fade"></div>

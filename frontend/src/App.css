@@ -668,3 +668,34 @@ a {
     min-width: 100%;
   }
 }
+
+.hero-link-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 32px;
+  border-radius: 14px;
+  min-width: 190px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #f8fbff;
+  background: linear-gradient(135deg, #38bdf8, #2563eb);
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.hero-link-button:hover {
+  transform: translateY(-3px);
+  opacity: 0.95;
+}
+
+.logo {
+  cursor: pointer;
+}
+
+.nav-links span {
+  cursor: pointer;
+}
+

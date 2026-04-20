@@ -8,7 +8,7 @@ function Navbar() {
 
       <nav className="nav-links">
         <a href="/elections">Elections</a>
-        <a href="#">Login</a>
+        <a href="/login">Login</a>
       </nav>
     </header>
   );
