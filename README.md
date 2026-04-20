@@ -14,8 +14,8 @@ The purpose of OmniVote is to provide a secure, organized, and easy-to-use syste
 - Voter eligibility management
 - Ballot generation and vote submission
 - Result computation and publication
-- System activity tracking and audit logging     
-```md
+- System activity tracking and audit logging
+
 ## Repository Structure
 
 ```text
@@ -29,11 +29,13 @@ omnivote/
 │       ├── App.css          # Global styles for the app
 │       └── main.jsx         # Entry point
 │
+├── backend/                 # FastAPI backend server
 │
 └── docs/
     ├── class-diagram/       # Analysis and design class diagrams
     └── use-cases/           # Use case diagram, descriptions, activity, sequence, and state diagrams
 
+```
 ### Folder Explanation
 
 - **components/**  
