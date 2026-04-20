@@ -15,7 +15,7 @@ The purpose of OmniVote is to provide a secure, organized, and easy-to-use syste
 - Ballot generation and vote submission
 - Result computation and publication
 - System activity tracking and audit logging     
-
+```md
 ## Repository Structure
 
 ```text
