@@ -6,6 +6,7 @@ import SignupPage from "./pages/SignupPage";
 import UserHomePage from "./pages/UserHomePage";
 import UserProfilePage from "./pages/UserProfilePage";
 import UserElectionListPage from "./pages/UserElectionListPage";
+import ApplyAsCandidate from "./pages/ApplyAsCandidate";
 import "./App.css"
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
         <Route path="/profile" element={<UserProfilePage />} />
         <Route path="/dashboard" element={<UserHomePage />} />
         <Route path="/user-elections" element={<UserElectionListPage />} />
+        <Route path="/apply-candidate" element={<ApplyAsCandidate />} />
       </Routes>
     </BrowserRouter>
   )
