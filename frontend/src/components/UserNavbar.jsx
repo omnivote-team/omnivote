@@ -1,8 +1,9 @@
 import OmniVoteLogo from "./OmniVoteLogo";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 function UserNavbar() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   return (
     <header className="top-navbar">
@@ -11,9 +12,27 @@ function UserNavbar() {
       </div>
 
       <nav className="nav-links">
-        <span onClick={() => navigate("/user-elections")}>Elections</span>
-        <span onClick={() => navigate("/dashboard")}>Dashboard</span>
-        <span onClick={() => navigate("/profile")}>Profile</span>
+        <span
+          className={location.pathname === "/user-elections" ? "active-nav" : ""}
+          onClick={() => navigate("/user-elections")}
+        >
+          Elections
+        </span>
+
+        <span
+          className={location.pathname === "/dashboard" ? "active-nav" : ""}
+          onClick={() => navigate("/dashboard")}
+        >
+          Dashboard
+        </span>
+
+        <span
+          className={location.pathname === "/profile" ? "active-nav" : ""}
+          onClick={() => navigate("/profile")}
+        >
+          Profile
+        </span>
+
         <span onClick={() => navigate("/")}>Logout</span>
       </nav>
     </header>

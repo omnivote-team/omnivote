@@ -5,7 +5,7 @@ import ElectionTabs from "./ElectionTabs";
 import ElectionFilters from "./ElectionFilters";
 import EmptyState from "./EmptyState";
 
-function ElectionListContent() {
+function ElectionListContent({ onViewDetails }) {
   const [activeTab, setActiveTab] = useState("ongoing");
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedOrganization, setSelectedOrganization] = useState("");
@@ -63,7 +63,11 @@ function ElectionListContent() {
         {filteredElections.length > 0 ? (
           <div className="election-cards-container">
             {filteredElections.map((election) => (
-              <ElectionCard key={election.id} election={election} />
+              <ElectionCard
+                key={election.id}
+                election={election}
+                onViewDetails={() => onViewDetails(election)}
+              />
             ))}
           </div>
         ) : (

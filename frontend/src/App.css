@@ -1,8 +1,4 @@
-/* =========================================================
-   ROOT + GLOBAL RESET
-   These rules make the app take full width and remove the
-   browser's default spacing so our layout stays consistent.
-   ========================================================= */
+
 
 #root {
   width: 100%;
@@ -490,6 +486,7 @@ a {
   cursor: pointer;
   font-size: 15px;
   font-weight: 600;
+  opacity: 0.75;
   transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
@@ -497,10 +494,15 @@ a {
   background: rgba(255, 255, 255, 0.08);
 }
 
-.active-tab {
-  background: rgba(59, 130, 246, 0.18);
+.election-tabs button.active-tab {
+  background: linear-gradient(135deg, #38bdf8, #2563eb);
   color: #ffffff;
-  border-color: rgba(96, 165, 250, 0.35);
+  border-color: #7dd3fc;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.22);
+  opacity: 1;
+}
+.election-tabs button.active-tab {
+  opacity: 1;
 }
 
 /* Outer wrapper for the whole filter row */
@@ -699,3 +701,25 @@ a {
   cursor: pointer;
 }
 
+
+
+.nav-links span {
+  position: relative;
+}
+
+.nav-links span.active-nav {
+  color: #7dd3fc;
+  font-weight: 700;
+}
+
+.nav-links span.active-nav::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -8px;
+  height: 3px;
+  border-radius: 999px;
+  background: #38bdf8;
+  box-shadow: 0 0 5px rgba(56, 189, 248, 0.25);
+}
