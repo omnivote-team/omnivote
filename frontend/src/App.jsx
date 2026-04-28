@@ -7,6 +7,7 @@ import UserHomePage from "./pages/UserHomePage";
 import UserProfilePage from "./pages/UserProfilePage";
 import UserElectionListPage from "./pages/UserElectionListPage";
 import ApplyAsCandidate from "./pages/ApplyAsCandidate";
+import UserElectionDetailsPage from "./pages/UserElectionDetailsPage";
 import "./App.css"
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
         <Route path="/profile" element={<UserProfilePage />} />
         <Route path="/dashboard" element={<UserHomePage />} />
         <Route path="/user-elections" element={<UserElectionListPage />} />
+        <Route path="/user-elections/:id" element={<UserElectionDetailsPage />} />
         <Route path="/apply-candidate" element={<ApplyAsCandidate />} />
       </Routes>
     </BrowserRouter>

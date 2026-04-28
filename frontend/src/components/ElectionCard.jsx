@@ -1,4 +1,4 @@
-function ElectionCard({ election, title, organization, status, dates }) {
+function ElectionCard({ election, title, organization, status, dates, onViewDetails }) {
   const cardTitle = election?.title || title;
   const cardOrganization = election?.organization || organization;
   const cardStatus = election?.status || status;
@@ -12,7 +12,9 @@ function ElectionCard({ election, title, organization, status, dates }) {
       <p className="election-organization">{cardOrganization}</p>
       <p className="election-dates">{cardDates}</p>
 
-      <button className="details-button">View Details</button>
+      <button className="details-button" onClick={onViewDetails}>
+        View Details
+      </button>
     </div>
   );
 }

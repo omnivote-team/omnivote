@@ -17,6 +17,10 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  text-align: left;
+}
+.user-welcome-text {
+  text-align: left;
 }
 
 .user-welcome-text h2 {

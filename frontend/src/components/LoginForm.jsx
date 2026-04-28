@@ -18,7 +18,7 @@ function LoginForm({ selectedRole }) {
     if (isAdmin) {
       navigate("/dashboard");
     } else {
-      navigate("/user-home");
+      navigate("/dashboard");
     }
   };
 

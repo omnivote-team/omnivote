@@ -1,3 +1,4 @@
+
 .apply-candidate-page {
   min-height: 100vh;
   background:
@@ -9,11 +10,13 @@
 .apply-candidate-content {
   max-width: 720px;
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: 24px 20px 40px;
+  text-align: left;
 }
 
 .candidate-header {
-  margin-bottom: 32px;
+  margin-bottom: 22px;
+  text-align: left;
 }
 
 .back-btn {
@@ -24,8 +27,9 @@
   font-weight: 600;
   cursor: pointer;
   padding: 0;
-  margin-bottom: 16px;
-  display: inline-block;
+  margin-bottom: 12px;
+  display: inline-flex;
+  text-align: left;
   transition: color 0.2s ease, text-shadow 0.2s ease;
 }
 
@@ -36,15 +40,17 @@
 
 .candidate-header h1 {
   color: white;
-  font-size: 36px;
+  font-size: 30px;
   font-weight: 700;
-  margin: 0 0 8px;
+  margin: 0 0 6px;
+  text-align: left;
 }
 
 .candidate-header p {
   color: #cbd5e1;
-  font-size: 16px;
+  font-size: 15px;
   margin: 0;
+  text-align: left;
 }
 
 .apply-candidate-card {
@@ -54,37 +60,36 @@
     rgba(30, 41, 59, 0.72) 100%
   );
   border-radius: 24px;
-  padding: 36px;
+  padding: 28px;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
   border: 1px solid rgba(148, 163, 184, 0.18);
   backdrop-filter: blur(10px);
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
 }
-
 
 .form-group {
   display: flex;
   flex-direction: column;
-  margin-bottom: 20px;
+  margin-bottom: 14px;
 }
 
 .form-group label {
   font-size: 15px;
   font-weight: 600;
   color: #e2e8f0;
-  margin-bottom: 8px;
+  margin-bottom: 7px;
 }
 
 .form-group input,
 .form-group select,
 .form-group textarea {
   width: 100%;
-  padding: 16px 18px;
+  padding: 13px 16px;
   border: 1px solid rgba(148, 163, 184, 0.28);
   border-radius: 14px;
-  font-size: 16px;
+  font-size: 15px;
   background: rgba(255, 255, 255, 0.06);
   color: #f8fafc;
   transition: all 0.2s ease;
@@ -117,8 +122,8 @@
 
 .form-group textarea {
   resize: vertical;
-  min-height: 140px;
-  line-height: 1.6;
+  min-height: 100px;
+  line-height: 1.5;
 }
 
 .field-hint {
@@ -127,21 +132,20 @@
   margin-top: 6px;
 }
 
-
 .note-box {
   background: rgba(37, 99, 235, 0.10);
   border: 1px solid rgba(37, 99, 235, 0.28);
   border-radius: 14px;
-  padding: 16px 20px;
-  margin-bottom: 24px;
-  margin-top: 8px;
+  padding: 14px 18px;
+  margin-bottom: 18px;
+  margin-top: 4px;
 }
 
 .note-box p {
   margin: 0;
   font-size: 14px;
   color: #cbd5e1;
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
 .note-box strong {
@@ -153,7 +157,7 @@
   color: white;
   border: none;
   border-radius: 14px;
-  padding: 16px;
+  padding: 14px;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;

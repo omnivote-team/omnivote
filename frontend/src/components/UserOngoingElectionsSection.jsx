@@ -1,10 +1,17 @@
+import { useNavigate } from "react-router-dom";
 import ElectionCard from "./ElectionCard";
 import mockElections from "../data/mockElections";
 
 function UserOngoingElectionsSection() {
+  const navigate = useNavigate();
+
   const ongoingElections = mockElections.filter(
     (election) => election.status === "Ongoing"
   );
+
+  const handleViewDetails = (election) => {
+    navigate(`/user-elections/${election.id}`);
+  };
 
   return (
     <section className="user-ongoing-elections-section">
@@ -17,10 +24,8 @@ function UserOngoingElectionsSection() {
         {ongoingElections.map((election) => (
           <ElectionCard
             key={election.id}
-            title={election.title}
-            organization={election.organization}
-            status={election.status}
-            dates={election.dates}
+            election={election}
+            onViewDetails={() => handleViewDetails(election)}
           />
         ))}
       </div>
