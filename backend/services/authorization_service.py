@@ -15,10 +15,10 @@ def can_view_full_election(user):
 def can_apply_as_candidate(user, election):
     require_authenticated_user(user)
 
-    if election.status == "closed":
+    if election.status != "upcoming":
         raise HTTPException(
             status_code=400,
-            detail="Cannot apply to a closed election"
+            detail="Candidate applications are only allowed before the election opens"
         )
 
     return True
@@ -38,7 +38,7 @@ def can_view_results(election):
     if not election.results_published:
         raise HTTPException(
             status_code=403,
-            deta8il="Results are not published yet"
+            detail="Results are not published yet"
         )
 
     return True

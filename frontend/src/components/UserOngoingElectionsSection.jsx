@@ -1,13 +1,34 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ElectionCard from "./ElectionCard";
-import mockElections from "../data/mockElections";
+import API from "../api/api";
 
 function UserOngoingElectionsSection() {
   const navigate = useNavigate();
 
-  const ongoingElections = mockElections.filter(
-    (election) => election.status === "Ongoing"
-  );
+  const [ongoingElection, setOngoingElection] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchOngoingElection = async () => {
+      try {
+        const response = await API.get("/public/elections/");
+
+        const ongoing = response.data.find(
+          (election) => election.status?.toLowerCase() === "open"
+        );
+
+        setOngoingElection(ongoing || null);
+      } catch (error) {
+        console.log(error);
+        setOngoingElection(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOngoingElection();
+  }, []);
 
   const handleViewDetails = (election) => {
     navigate(`/user-elections/${election.id}`);
@@ -21,13 +42,19 @@ function UserOngoingElectionsSection() {
       </div>
 
       <div className="election-list-container">
-        {ongoingElections.map((election) => (
+        {loading ? (
+          <p>Loading ongoing election...</p>
+        ) : ongoingElection ? (
           <ElectionCard
-            key={election.id}
-            election={election}
-            onViewDetails={() => handleViewDetails(election)}
+            election={ongoingElection}
+            onViewDetails={() => handleViewDetails(ongoingElection)}
           />
-        ))}
+        ) : (
+          <div className="dashboard-empty-election">
+            <h3>No ongoing elections right now</h3>
+            <p>When a live election becomes available, it will appear here.</p>
+          </div>
+        )}
       </div>
     </section>
   );

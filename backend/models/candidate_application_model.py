@@ -1,5 +1,7 @@
 from sqlalchemy import Column, Integer, String, Text, ForeignKey, UniqueConstraint
 from database import Base
+from sqlalchemy import DateTime
+from datetime import datetime
 
 
 class CandidateApplication(Base):
@@ -9,6 +11,10 @@ class CandidateApplication(Base):
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     manifesto = Column(Text, nullable=True)
     status = Column(String, default="pending")
+    remarks = Column(Text, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    reviewed_at = Column(DateTime, nullable=True)
     __table_args__ = (
         UniqueConstraint("election_id", "user_id", name="unique_user_application_per_election"),
     )

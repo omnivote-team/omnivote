@@ -14,12 +14,14 @@ router = APIRouter(
     tags=["Admin Dashboard"]
 )
 
+
 @router.get("/summary")
 def admin_dashboard_summary(
     db: Session = Depends(get_db),
     current_admin=Depends(require_admin)
 ):
     return get_admin_dashboard_summary(db)
+
 
 @router.get("/election/{election_id}")
 def election_dashboard_summary(

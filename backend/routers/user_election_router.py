@@ -1,14 +1,10 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from database import get_db
-
-from models.election_model import Election
-
-from schemas.election_schema import FullElectionResponse
-
+from schemas.election_schema import FullElectionWithCandidatesResponse
 from services.auth_dependency import get_current_user_data
-from services.authorization_service import can_view_full_election
+from services.user_election_service import get_full_election_details_service
 
 
 router = APIRouter(
@@ -17,22 +13,14 @@ router = APIRouter(
 )
 
 
-@router.get("/{election_id}", response_model=FullElectionResponse)
+@router.get("/{election_id}", response_model=FullElectionWithCandidatesResponse)
 def get_full_election_details(
     election_id: int,
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user_data)
 ):
-    can_view_full_election(current_user)
-
-    election = db.query(Election).filter(
-        Election.id == election_id
-    ).first()
-
-    if election is None:
-        raise HTTPException(
-            status_code=404,
-            detail="Election not found"
-        )
-
-    return election
+    return get_full_election_details_service(
+        db=db,
+        election_id=election_id,
+        current_user=current_user
+    )

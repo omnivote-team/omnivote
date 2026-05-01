@@ -8,6 +8,8 @@ import UserProfilePage from "./pages/UserProfilePage";
 import UserElectionListPage from "./pages/UserElectionListPage";
 import ApplyAsCandidate from "./pages/ApplyAsCandidate";
 import UserElectionDetailsPage from "./pages/UserElectionDetailsPage";
+import VotePage from "./pages/VotePage";
+import MyApplicationsPage from "./pages/MyApplicationsPage";
 import "./App.css"
 
 function App() {
@@ -24,6 +26,8 @@ function App() {
         <Route path="/user-elections" element={<UserElectionListPage />} />
         <Route path="/user-elections/:id" element={<UserElectionDetailsPage />} />
         <Route path="/apply-candidate" element={<ApplyAsCandidate />} />
+        <Route path="/vote/:id" element={<VotePage />} />
+        <Route path="/my-applications" element={<MyApplicationsPage />} />
       </Routes>
     </BrowserRouter>
   )

@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from database import engine, Base
 from models.user_model import User
 from routers import auth_router
@@ -23,6 +24,19 @@ from routers.public_election_router import router as public_election_router
 from routers.user_election_router import router as user_election_router
 
 app = FastAPI(title="OmniVote API")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+        "http://localhost:5174",
+        "http://localhost:5175",
+        "http://localhost:5176",
+        "http://localhost:5177",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 app.include_router(auth_router.router)
 app.include_router(institution_router.router)
 app.include_router(department_router.router)

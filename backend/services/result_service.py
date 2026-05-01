@@ -1,8 +1,9 @@
 from fastapi import HTTPException
+
 from models.vote_model import Vote
 from models.candidate_model import Candidate
 from models.result_model import Result
-
+from models.election_model import Election
 
 def generate_results_for_election(db, election):
     if election.status != "closed":
@@ -68,3 +69,57 @@ def check_results_visible(election):
         )
 
     return True
+
+from models.election_model import Election
+
+
+def generate_results_service(db, election_id: int):
+    election = db.query(Election).filter(
+        Election.id == election_id
+    ).first()
+
+    if election is None:
+        raise HTTPException(status_code=404, detail="Election not found")
+
+    generate_results_for_election(db, election)
+
+    db.commit()
+
+    return db.query(Result).filter(
+        Result.election_id == election_id
+    ).all()
+
+
+def publish_results_service(db, election_id: int):
+    election = db.query(Election).filter(
+        Election.id == election_id
+    ).first()
+
+    if election is None:
+        raise HTTPException(status_code=404, detail="Election not found")
+
+    publish_results_for_election(election)
+
+    db.commit()
+    db.refresh(election)
+
+    return {
+        "message": "Results published successfully",
+        "election_id": election.id,
+        "results_published": election.results_published
+    }
+
+
+def view_published_results_service(db, election_id: int):
+    election = db.query(Election).filter(
+        Election.id == election_id
+    ).first()
+
+    if election is None:
+        raise HTTPException(status_code=404, detail="Election not found")
+
+    check_results_visible(election)
+
+    return db.query(Result).filter(
+        Result.election_id == election_id
+    ).all()

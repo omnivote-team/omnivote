@@ -1,13 +1,14 @@
-function UserStatCard({ title, value, icon, iconClassName = "" }) {
+function UserStatCard({ title, value, icon, iconClassName = "", onClick }) {
   return (
-    <div className="user-stat-card">
-      <div className={`user-stat-icon ${iconClassName}`}>
-        {icon}
-      </div>
+    <div
+      className={onClick ? "user-stat-card clickable" : "user-stat-card"}
+      onClick={onClick}
+    >
+      <div className={`user-stat-icon ${iconClassName}`}>{icon}</div>
 
       <div className="user-stat-content">
         <p>{title}</p>
-        <h3>{value}</h3>
+        {value && <h3>{value}</h3>}
       </div>
     </div>
   );

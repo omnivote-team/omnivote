@@ -9,3 +9,13 @@ class CandidateResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class AdminCandidateResponse(BaseModel):
+    id: int
+    election_id: int
+    election_title: str
+    user_id: int
+    candidate_name: str
+    candidate_email: str
+    application_id: int | None = None

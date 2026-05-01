@@ -1,7 +1,10 @@
-import { BadgeCheck, Calendar, CheckCircle } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { BadgeCheck, Calendar, FileText } from "lucide-react";
 import UserStatCard from "./UserStatCard";
 
 function UserStatsSection() {
+  const navigate = useNavigate();
+
   return (
     <div className="user-stats-section">
       <UserStatCard
@@ -18,12 +21,13 @@ function UserStatsSection() {
         iconClassName="blue"
       />
 
-      <UserStatCard
-        title="Completed Votes"
-        value="1"
-        icon={<CheckCircle size={28} />}
-        iconClassName="purple"
-      />
+     <UserStatCard
+      title="View My Applications"
+      value=""
+      icon={<FileText size={28} />}
+      iconClassName="purple"
+      onClick={() => navigate("/my-applications")}
+    />
     </div>
   );
 }

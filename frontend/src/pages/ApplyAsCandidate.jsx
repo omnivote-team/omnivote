@@ -6,14 +6,13 @@ import ElectionDropdown from "../components/ElectionDropdown";
 import CandidateFormFields from "../components/CandidateFormFields";
 import CandidateFormNote from "../components/CandidateFormNote";
 import "./ApplyAsCandidate.css";
+import API from "../api/api";
 
 const ApplyAsCandidate = () => {
   const navigate = useNavigate();
 
   const [selectedElection, setSelectedElection] = useState("");
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
     manifesto: "",
   });
 
@@ -22,15 +21,33 @@ const ApplyAsCandidate = () => {
   };
 
   const isFormValid =
-    selectedElection &&
-    formData.name.trim() &&
-    formData.email.trim() &&
-    formData.manifesto.length >= 50;
+    selectedElection && formData.manifesto.trim().length >= 50;
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!isFormValid) return;
-    console.log("Submitting:", { selectedElection, ...formData });
-    // TODO: connect to backend API
+
+    try {
+      const token = localStorage.getItem("token");
+
+      await API.post(
+        "/candidate-applications/",
+        {
+          election_id: Number(selectedElection),
+          manifesto: formData.manifesto,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      alert("Candidate application submitted successfully.");
+      navigate("/dashboard");
+    } catch (error) {
+      console.log(error);
+      alert(error.response?.data?.detail || "Failed to submit application.");
+    }
   };
 
   return (

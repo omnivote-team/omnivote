@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import API from "../api/api";
 
 function LoginForm({ selectedRole }) {
   const isAdmin = selectedRole === "admin";
@@ -8,17 +9,26 @@ function LoginForm({ selectedRole }) {
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!identifier.trim() || !password.trim()) {
       return;
     }
 
-    if (isAdmin) {
+    try {
+      const response = await API.post("/auth/login", {
+        identifier: identifier,
+        password: password,
+      });
+      console.log(response.data);
+
+      localStorage.setItem("token", response.data.user.access_token);
+      localStorage.setItem("user", JSON.stringify(response.data.user));
       navigate("/dashboard");
-    } else {
-      navigate("/dashboard");
+    } catch (error) {
+      console.log(error);
+      alert("Login failed. Please check your email and password.");
     }
   };
 
