@@ -10,6 +10,13 @@ import ApplyAsCandidate from "./pages/ApplyAsCandidate";
 import UserElectionDetailsPage from "./pages/UserElectionDetailsPage";
 import VotePage from "./pages/VotePage";
 import MyApplicationsPage from "./pages/MyApplicationsPage";
+import AdminDashboardPage from "./pages/AdminDashboardPage";
+import AdminApplicationsPage from "./pages/AdminApplicationsPage";
+import AdminApplicationDetailsPage from "./pages/AdminApplicationDetailsPage";
+import AdminManageElectionPage from "./pages/AdminManageElectionPage";
+import AdminElectionDetailsPage from "./pages/AdminElectionDetailsPage";
+import CreateElectionPage from "./pages/CreateElectionPage";
+import AdminEditElectionPage from "./pages/AdminEditElectionPage";
 import "./App.css"
 
 function App() {
@@ -28,6 +35,13 @@ function App() {
         <Route path="/apply-candidate" element={<ApplyAsCandidate />} />
         <Route path="/vote/:id" element={<VotePage />} />
         <Route path="/my-applications" element={<MyApplicationsPage />} />
+        <Route path="/admin-dashboard" element={<AdminDashboardPage />} />
+        <Route path="/admin-applications" element={<AdminApplicationsPage />} />
+        <Route path="/admin-applications/:id" element={<AdminApplicationDetailsPage />} />
+        <Route path="/admin/elections" element={<AdminManageElectionPage />} />
+         <Route path="/admin/elections/create" element={<CreateElectionPage />} />
+        <Route path="/admin/elections/:election_id/edit" element={<AdminEditElectionPage />} />
+        <Route path="/admin/elections/:election_id" element={<AdminElectionDetailsPage />} />
       </Routes>
     </BrowserRouter>
   )

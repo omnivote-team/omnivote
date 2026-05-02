@@ -9,6 +9,10 @@ from models.candidate_model import Candidate
 from models.user_model import User
 from models.election_model import Election
 
+from models.department_model import Department
+from models.batch_model import Batch
+from models.section_model import Section
+
 from services.authorization_service import can_apply_as_candidate
 from services.eligibility_service import check_user_election_eligibility
 VALID_APPLICATION_STATUSES = ["approved", "rejected"]
@@ -312,3 +316,57 @@ def get_user_applications_service(db: Session, user_id: int):
         })
 
     return result
+
+
+def get_admin_application_details_service(db: Session, application_id: int):
+    row = (
+        db.query(
+            CandidateApplication,
+            User,
+            Election,
+            Institution,
+            Department,
+            Batch,
+            Section
+        )
+        .join(User, CandidateApplication.user_id == User.id)
+        .join(Election, CandidateApplication.election_id == Election.id)
+        .join(Institution, User.institution_id == Institution.id)
+        .join(Department, User.department_id == Department.id)
+        .join(Batch, User.batch_id == Batch.id)
+        .join(Section, User.section_id == Section.id)
+        .filter(CandidateApplication.id == application_id)
+        .first()
+    )
+
+    if row is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Candidate application not found"
+        )
+
+    application, user, election, institution, department, batch, section = row
+
+    return {
+        "id": application.id,
+        "election_id": election.id,
+        "election_title": election.title,
+        "user_id": user.id,
+        "applicant_name": user.full_name,
+        "applicant_email": user.email,
+        "student_id": user.student_id,
+        "institution_id": institution.id,
+        "institution_name": institution.name,
+        "department_id": department.id,
+        "department_name": department.name,
+        "batch_id": batch.id,
+        "batch_name": batch.name,
+        "section_id": section.id,
+        "section_name": section.name,
+        "manifesto": application.manifesto,
+        "status": application.status,
+        "remarks": application.remarks,
+        "created_at": application.created_at,
+        "updated_at": application.updated_at,
+        "reviewed_at": application.reviewed_at
+    }

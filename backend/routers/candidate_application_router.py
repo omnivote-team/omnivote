@@ -10,6 +10,7 @@ from services.candidate_application_service import (
     cancel_own_application,
     get_admin_application_list,
     get_admin_filtered_applications,
+    get_admin_application_details_service,
     get_applications_by_status_service,
     get_applications_by_election_service,
     get_user_applications_service
@@ -19,7 +20,8 @@ from schemas.candidate_application_schema import (
     CandidateApplicationCreate,
     CandidateApplicationResponse,
     CandidateApplicationDecision,
-    AdminCandidateApplicationResponse
+    AdminCandidateApplicationResponse,
+    AdminCandidateApplicationDetailsResponse
 )
 
 
@@ -72,6 +74,20 @@ def filter_admin_applications(
         db=db,
         election_id=election_id,
         status=status
+    )
+
+@router.get(
+    "/admin/{application_id}",
+    response_model=AdminCandidateApplicationDetailsResponse
+)
+def get_admin_application_details(
+    application_id: int,
+    db: Session = Depends(get_db),
+    current_admin=Depends(require_admin)
+):
+    return get_admin_application_details_service(
+        db=db,
+        application_id=application_id
     )
 
 @router.put("/{application_id}/decision", response_model=CandidateApplicationResponse)

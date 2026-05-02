@@ -209,3 +209,4 @@ __marimo__/
 
 backend/venv/
 frontend/node_modules/
+frontend/.vite/

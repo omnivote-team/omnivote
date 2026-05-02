@@ -17,6 +17,7 @@ class UserSignup(BaseModel):
 class UserLogin(BaseModel):
     identifier: str
     password: str
+    requested_role: str
 
 
 class UserResponse(BaseModel):

@@ -1,0 +1,149 @@
+.create-election-page {
+  min-height: 100vh;
+  background: #f5f7fb;
+}
+
+.create-election-container {
+  max-width: 850px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+.create-election-container h1 {
+  margin-top: 24px;
+  margin-bottom: 8px;
+  font-size: 32px;
+  color: #111827;
+}
+
+.create-election-container p {
+  margin-bottom: 28px;
+  color: #6b7280;
+}
+
+.create-election-form {
+  background: white;
+  padding: 28px;
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.create-election-form label {
+  margin-top: 8px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.create-election-form input,
+.create-election-form textarea,
+.create-election-form select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  font-size: 15px;
+  outline: none;
+  background: white;
+}
+
+.create-election-form textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.create-election-form input:focus,
+.create-election-form textarea:focus,
+.create-election-form select:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+}
+
+.create-election-submit {
+  margin-top: 20px;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  background: #4f46e5;
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.create-election-submit:hover {
+  background: #4338ca;
+}
+
+.create-election-error {
+  background: #fee2e2;
+  color: #991b1b !important;
+  padding: 12px 14px;
+  border-radius: 10px;
+  margin-bottom: 16px;
+}
+
+.back-link {
+  border: none;
+  background: transparent;
+  color: #4f46e5;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  font-size: 15px;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+.create-election-form label {
+  text-align: left;
+  font-weight: 700;
+  color: #1f2937;
+  margin-top: 10px;
+}
+
+.required-star {
+  color: #2563eb;
+  font-weight: 800;
+}
+
+.create-election-form select:disabled {
+  background-color: #f3f4f6;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.create-election-form input::placeholder {
+  color: #9ca3af;
+}
+
+
+.eligibility-summary {
+  margin-top: 22px;
+  padding: 18px 20px;
+  border-radius: 14px;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  text-align: left;
+}
+
+.eligibility-summary h3 {
+  margin: 0 0 12px 0;
+  color: #1e3a8a;
+  font-size: 18px;
+  text-align: left;
+}
+
+.eligibility-summary p {
+  margin: 8px 0;
+  color: #1f2937;
+  text-align: left;
+}
+
+.eligibility-summary strong {
+  color: #111827;
+}

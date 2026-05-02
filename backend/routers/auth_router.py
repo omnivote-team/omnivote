@@ -96,6 +96,11 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
 
     if not verify_password(user.password, existing_user.password):
         return {"error": "Invalid email/student ID or password"}
+    if user.requested_role == "admin" and existing_user.role != "admin":
+        return {"error": "This account is not an admin account"}
+
+    if user.requested_role == "user" and existing_user.role != "user":
+        return {"error": "Please use the admin login tab for admin accounts"}
     access_token = create_access_token(data={"user_id": existing_user.id,"role": existing_user.role})
     
     return {

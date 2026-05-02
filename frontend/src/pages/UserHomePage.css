@@ -17,10 +17,6 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  text-align: left;
-}
-.user-welcome-text {
-  text-align: left;
 }
 
 .user-welcome-text h2 {
@@ -414,12 +410,4 @@
 
 .voting-history-link:hover {
   color: #4cc9ff;
-}
-
-.user-stat-card.clickable {
-  cursor: pointer;
-}
-
-.user-stat-card.clickable:hover {
-  transform: translateY(-2px);
 }

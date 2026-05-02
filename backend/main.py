@@ -22,6 +22,7 @@ from routers import result_router
 from routers.dashboard_router import router as dashboard_router
 from routers.public_election_router import router as public_election_router
 from routers.user_election_router import router as user_election_router
+from routers import reference_router
 
 app = FastAPI(title="OmniVote API")
 app.add_middleware(
@@ -51,6 +52,7 @@ app.include_router(result_router.router)
 app.include_router(dashboard_router)
 app.include_router(public_election_router)
 app.include_router(user_election_router)
+app.include_router(reference_router.router)
 
 
 Base.metadata.create_all(bind=engine)

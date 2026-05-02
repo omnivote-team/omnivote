@@ -12,10 +12,18 @@ class ElectionCreate(BaseModel):
     election_type: str
     start_datetime: datetime
     end_datetime: datetime
-    institution_id: int
+
+    institution_id: Optional[int] = None
+    new_institution_name: Optional[str] = None
+
     department_id: Optional[int] = None
+    new_department_name: Optional[str] = None
+
     batch_id: Optional[int] = None
+    new_batch_name: Optional[str] = None
+
     section_id: Optional[int] = None
+    new_section_name: Optional[str] = None
 
 
 class PublicElectionResponse(BaseModel):
@@ -42,8 +50,11 @@ class FullElectionResponse(BaseModel):
     institution_id: int
     institution_name: Optional[str] = None
     department_id: Optional[int] = None
+    department_name: Optional[str] = None
     batch_id: Optional[int] = None
+    batch_name: Optional[str] = None
     section_id: Optional[int] = None
+    section_name: Optional[str] = None
     created_by: int
 
     class Config:
@@ -77,6 +88,9 @@ class FullElectionWithCandidatesResponse(BaseModel):
     section_id: Optional[int] = None
     created_by: int
     candidates: list[CandidateDetailResponse]
+    department_name: Optional[str] = None
+    batch_name: Optional[str] = None
+    section_name: Optional[str] = None
 
     class Config:
         from_attributes = True
@@ -107,6 +121,10 @@ class AdminElectionDetailsResponse(BaseModel):
     total_votes: int
     total_candidates: int
     total_applications: int
+
+    department_name: Optional[str] = None
+    batch_name: Optional[str] = None
+    section_name: Optional[str] = None
 
     class Config:
         from_attributes = True

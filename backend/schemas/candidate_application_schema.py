@@ -49,3 +49,36 @@ class AdminCandidateApplicationResponse(BaseModel):
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
     reviewed_at: Optional[datetime] = None
+
+
+class AdminCandidateApplicationDetailsResponse(BaseModel):
+    id: int
+
+    election_id: int
+    election_title: str
+
+    user_id: int
+    applicant_name: str
+    applicant_email: str
+    student_id: str
+
+    institution_id: int
+    institution_name: str
+
+    department_id: int
+    department_name: str
+
+    batch_id: int
+    batch_name: str
+
+    section_id: int
+    section_name: str
+
+    manifesto: Optional[str] = None
+
+    status: str
+    remarks: Optional[str] = None
+
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
+    reviewed_at: Optional[datetime] = None

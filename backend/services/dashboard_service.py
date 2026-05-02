@@ -3,31 +3,32 @@ from models.vote_model import Vote
 from models.candidate_model import Candidate
 from models.candidate_application_model import CandidateApplication
 from fastapi import HTTPException
+from services.election_service import compute_status
 
 def get_admin_dashboard_summary(db):
-    total_elections = db.query(Election).count()
-    total_votes = db.query(Vote).count()
-    total_candidates = db.query(Candidate).count()
+    elections = db.query(Election).all()
+
+    total_elections = len(elections)
+
+    ongoing_elections = 0
+
+    for election in elections:
+        status = compute_status(
+            election.start_datetime,
+            election.end_datetime
+        )
+
+        if status == "open":
+            ongoing_elections += 1
 
     pending_applications = db.query(CandidateApplication).filter(
         CandidateApplication.status == "pending"
     ).count()
 
-    approved_applications = db.query(CandidateApplication).filter(
-        CandidateApplication.status == "approved"
-    ).count()
-
-    rejected_applications = db.query(CandidateApplication).filter(
-        CandidateApplication.status == "rejected"
-    ).count()
-
     return {
         "total_elections": total_elections,
-        "total_votes": total_votes,
-        "total_candidates": total_candidates,
-        "pending_applications": pending_applications,
-        "approved_applications": approved_applications,
-        "rejected_applications": rejected_applications
+        "ongoing_elections": ongoing_elections,
+        "pending_applications": pending_applications
     }
 
 

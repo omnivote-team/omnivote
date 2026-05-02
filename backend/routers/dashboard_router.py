@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
+from schemas.dashboard_schema import AdminDashboardSummaryResponse
 
 from database import get_db
 from services.auth_dependency import require_admin
@@ -14,8 +15,7 @@ router = APIRouter(
     tags=["Admin Dashboard"]
 )
 
-
-@router.get("/summary")
+@router.get("/summary",response_model=AdminDashboardSummaryResponse)
 def admin_dashboard_summary(
     db: Session = Depends(get_db),
     current_admin=Depends(require_admin)
