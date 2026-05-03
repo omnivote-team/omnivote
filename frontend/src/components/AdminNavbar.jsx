@@ -1,8 +1,9 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import OmniVoteLogo from "./OmniVoteLogo";
 
 function AdminNavbar() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -10,27 +11,31 @@ function AdminNavbar() {
     navigate("/login");
   };
 
+  const isElectionPage = location.pathname.startsWith("/admin/elections");
+  const isDashboardPage = location.pathname === "/admin-dashboard";
+
   return (
     <div className="user-top-navbar">
-      <div className="user-navbar-logo">
+      <div className="user-navbar-logo" onClick={() => navigate("/admin-dashboard")}>
         <OmniVoteLogo />
       </div>
 
       <div className="user-nav-links">
-        <span onClick={() => navigate("/admin/elections")}>
+        <span
+          className={isElectionPage ? "active-link" : ""}
+          onClick={() => navigate("/admin/elections")}
+        >
           Elections
         </span>
 
         <span
-          className="active-link"
+          className={isDashboardPage ? "active-link" : ""}
           onClick={() => navigate("/admin-dashboard")}
         >
           Admin Dashboard
         </span>
 
-        <span onClick={handleLogout}>
-          Logout
-        </span>
+        <span onClick={handleLogout}>Logout</span>
       </div>
     </div>
   );

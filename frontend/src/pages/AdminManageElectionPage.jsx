@@ -61,7 +61,7 @@ function AdminManageElectionPage() {
         };
 
   return (
-    <div className="admin-election-list-page">
+    <div className="app-page admin-election-list-page">
       <AdminNavbar />
 
       <div className="admin-election-list-container">

@@ -289,12 +289,13 @@ def get_admin_election_details_service(db: Session, election_id: int):
     election = db.query(Election).filter(
         Election.id == election_id
     ).first()
-
+    
     if election is None:
         raise HTTPException(
             status_code=404,
             detail="Election not found"
         )
+
     sync_election_status(db, election)
     if election.status == "closed":
         existing_results = db.query(Result).filter(
@@ -351,7 +352,7 @@ def get_admin_election_details_service(db: Session, election_id: int):
             "candidate_name": user.full_name
         })
 
-        applications = db.query(CandidateApplication).filter(
+    applications = db.query(CandidateApplication).filter(
         CandidateApplication.election_id == election_id
     ).all()
 

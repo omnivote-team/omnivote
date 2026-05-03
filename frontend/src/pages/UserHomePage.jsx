@@ -4,7 +4,7 @@ import UserStatsSection from "../components/UserStatsSection";
 import UserActionsSection from "../components/UserActionsSection";
 import UserOngoingElectionsSection from "../components/UserOngoingElectionsSection";
 import UserVotingStatusSection from "../components/UserVotingStatusSection";
-import "./UserHomePage.css";
+import "./UserHomePage.css";  
 
 function UserHomePage() {
   return (

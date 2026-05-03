@@ -1,0 +1,435 @@
+/* =========================================================
+   ADMIN ELECTION DETAILS PAGE
+   ========================================================= */
+
+.election-details-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(37, 99, 235, 0.10), transparent 22%),
+    radial-gradient(circle at 82% 22%, rgba(124, 58, 237, 0.10), transparent 24%),
+    linear-gradient(180deg, #081120 0%, #0a1324 55%, #0d1630 100%);
+  color: var(--text-main);
+}
+
+/* Navbar same as admin dashboard */
+.election-details-page .user-top-navbar {
+  width: 100vw;
+  max-width: none;
+  margin: 0;
+  padding: 24px 88px;
+
+  border-radius: 0;
+  background: rgba(10, 15, 30, 0.62);
+  border: none;
+  border-bottom: 1px solid var(--border-soft);
+
+  box-shadow: none;
+  backdrop-filter: blur(16px);
+}
+
+.election-details-container {
+  max-width: 1350px;
+  margin: 0 auto;
+  padding: 48px var(--page-padding) 80px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.back-link {
+  width: fit-content;
+  background: transparent;
+  border: none;
+  color: #38bdf8 !important;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
+}
+
+.back-link:hover {
+  color: #7dd3fc !important;
+}
+
+/* Main rounded cards */
+.details-card {
+  width: 100%;
+
+  background: rgba(15, 23, 42, 0.82);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 24px;
+
+  padding: 34px;
+
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.20);
+  backdrop-filter: blur(12px);
+
+  color: var(--text-main);
+}
+
+.details-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.details-title {
+  font-size: 34px;
+  line-height: 1.15;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 10px;
+}
+
+.details-description {
+  color: var(--text-muted);
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+.details-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Status badge light blue */
+.election-status,
+.status-ongoing,
+.status-upcoming,
+.status-past {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(56, 189, 248, 0.16) !important;
+  color: #7dd3fc !important;
+  border: 1px solid rgba(125, 211, 252, 0.35) !important;
+
+  padding: 10px 20px;
+  border-radius: 999px;
+
+  font-size: 14px;
+  font-weight: 800;
+  text-transform: capitalize;
+}
+
+/* Edit button */
+.edit-election-btn {
+  background: linear-gradient(135deg, #38bdf8, #2563eb);
+  border: none;
+  color: white;
+
+  padding: 10px 18px;
+  border-radius: 16px;
+
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 800;
+
+  box-shadow: 0 14px 28px rgba(37, 99, 235, 0.24);
+}
+
+.edit-election-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* Meta info */
+.details-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px 90px;
+
+  padding-bottom: 34px;
+  margin-bottom: 28px;
+
+  border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+}
+
+.details-meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.meta-label {
+  color: var(--text-soft);
+  font-size: 15px;
+}
+
+.meta-value {
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+/* Stats */
+.details-stats-row {
+  display: flex;
+  gap: 42px;
+}
+
+.details-stat {
+  min-width: 110px;
+}
+
+.stat-number {
+  display: block;
+  color: #ffffff;
+  font-size: 34px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  color: var(--text-soft);
+  font-size: 14px;
+}
+
+/* Candidates card */
+.candidates-heading {
+  color: #ffffff;
+  font-size: 26px;
+  font-weight: 800;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.no-candidates {
+  color: var(--text-muted);
+  font-size: 16px;
+}
+
+.candidates-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Candidate rounded tabs */
+.candidate-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  padding: 24px;
+
+  background: rgba(15, 23, 42, 0.66);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 22px;
+
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.16);
+}
+
+.candidate-avatar {
+  width: 58px;
+  height: 58px;
+
+  border-radius: 50%;
+
+  background: rgba(56, 189, 248, 0.14);
+  color: #7dd3fc;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.candidate-info {
+  flex: 1;
+}
+
+.candidate-info-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.candidate-name {
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.candidate-manifesto {
+  color: var(--text-muted);
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.candidate-votes {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.winner-badge {
+  background: rgba(56, 189, 248, 0.16) !important;
+  color: #7dd3fc !important;
+  border: 1px solid rgba(125, 211, 252, 0.35) !important;
+
+  padding: 6px 12px;
+  border-radius: 999px;
+
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.vote-count {
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* Loading / error */
+.election-details-loading,
+.election-details-error {
+  max-width: 1350px;
+  margin: 40px auto;
+  padding: 20px var(--page-padding);
+  color: var(--text-muted);
+}
+
+.election-details-error {
+  color: #fecaca;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .election-details-page .user-top-navbar {
+    padding: 22px 24px;
+  }
+
+  .election-details-container {
+    padding: 36px 24px 70px;
+  }
+
+  .details-card {
+    padding: 24px;
+  }
+
+  .details-card-header,
+  .candidate-info-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .details-meta-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .details-stats-row {
+    flex-wrap: wrap;
+  }
+
+  .details-title {
+    font-size: 28px;
+  }
+}
+
+
+/* FORCE ADMIN DETAILS PAGE STYLING */
+
+.election-details-page,
+.app-page.election-details-page {
+  min-height: 100vh !important;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(37, 99, 235, 0.10), transparent 22%),
+    radial-gradient(circle at 82% 22%, rgba(124, 58, 237, 0.10), transparent 24%),
+    linear-gradient(180deg, #081120 0%, #0a1324 55%, #0d1630 100%) !important;
+}
+
+/* cover both possible navbar names */
+.election-details-page .user-top-navbar,
+.election-details-page .admin-top-navbar,
+.election-details-page .top-navbar {
+  width: 100vw !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 24px 88px !important;
+
+  border-radius: 0 !important;
+  background: rgba(10, 15, 30, 0.62) !important;
+  border: none !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+
+  box-shadow: none !important;
+  backdrop-filter: blur(16px) !important;
+}
+
+.details-card {
+  background: rgba(15, 23, 42, 0.82) !important;
+  border: 1px solid rgba(148, 163, 184, 0.18) !important;
+  border-radius: 24px !important;
+  color: white !important;
+}
+
+.details-title,
+.meta-value,
+.candidates-heading,
+.candidate-name,
+.stat-number {
+  color: white !important;
+}
+
+.details-description,
+.meta-label,
+.stat-label,
+.candidate-manifesto,
+.vote-count {
+  color: #cbd5e1 !important;
+}
+
+.candidate-card {
+  background: rgba(15, 23, 42, 0.66) !important;
+  border: 1px solid rgba(148, 163, 184, 0.18) !important;
+  border-radius: 22px !important;
+}
+
+
+/* Left align election details content */
+.details-card,
+.details-card * {
+  text-align: left;
+}
+
+.details-meta-grid {
+  justify-items: start;
+}
+
+.details-meta-item {
+  align-items: flex-start;
+}
+
+/* Keep status badge on right */
+.details-header-actions {
+  margin-left: auto;
+}
+
+/* Left align candidate manifesto/content */
+.candidate-info,
+.candidate-info * {
+  text-align: left;
+}
+
+.candidate-info-header {
+  justify-content: space-between;
+}
+
+.candidate-votes {
+  margin-left: auto;
+}
+
+.back-link {
+  margin-top: 18px !important;
+  margin-bottom: 34px !important;
+}

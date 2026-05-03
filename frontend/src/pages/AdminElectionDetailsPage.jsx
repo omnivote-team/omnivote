@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getAdminElectionDetails } from "../api/electionApi";
 import AdminNavbar from "../components/AdminNavbar";
-import "./AdminManageElectionPage.css";
+import "./AdminElectionDetailsPage.css";
 
 function AdminElectionDetailsPage() {
   const { election_id } = useParams();

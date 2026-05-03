@@ -1,79 +1,241 @@
 .voting-history-page {
   min-height: 100vh;
-  background: #0f172a;
-  color: #e2e8f0;
 }
 
 .voting-history-container {
-  max-width: 900px;
+  max-width: 1280px;
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: 48px var(--page-padding);
 }
 
 .voting-history-back-btn {
   background: transparent;
   border: none;
-  color: #93c5fd;
+  color: var(--primary);
   cursor: pointer;
-  margin-bottom: 20px;
-  font-size: 14px;
+  margin-bottom: 28px;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 0;
+}
+
+.voting-history-back-btn:hover {
+  color: #7dd3fc;
 }
 
 .voting-history-card {
-  background: #111827;
-  border: 1px solid #1f2937;
-  border-radius: 18px;
-  padding: 28px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
 }
 
 .voting-history-card h1 {
-  margin-bottom: 8px;
+  font-size: 42px;
+  color: var(--text-main);
+  margin-bottom: 10px;
+  text-align: left;
 }
 
 .voting-history-subtitle {
-  color: #94a3b8;
-  margin-bottom: 24px;
+  color: var(--text-muted);
+  margin-bottom: 34px;
+  font-size: 18px;
+  text-align: left;
 }
 
 .voting-history-list {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 0;
+
+  background: var(--bg-card);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-card);
 }
 
 .voting-history-item {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
   align-items: center;
-  background: #1e293b;
-  border: 1px solid #334155;
-  border-radius: 14px;
-  padding: 16px;
+  gap: 20px;
+
+  padding: 24px 28px;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.voting-history-item:last-child {
+  border-bottom: none;
 }
 
 .voting-history-item h3 {
-  margin: 0 0 6px;
+  color: var(--text-main);
+  font-size: 18px;
+  margin-bottom: 6px;
 }
 
 .voting-history-item p {
-  margin: 0;
-  color: #94a3b8;
+  color: var(--text-muted);
+  font-size: 15px;
 }
 
 .voting-history-status {
-  background: rgba(34, 197, 94, 0.15);
+  justify-self: end;
+  background: rgba(34, 197, 94, 0.16);
   color: #86efac;
   border: 1px solid rgba(34, 197, 94, 0.35);
-  padding: 6px 12px;
+  padding: 8px 16px;
   border-radius: 999px;
-  font-size: 13px;
+  font-size: 14px;
+  font-weight: 700;
 }
 
 .voting-history-empty-box {
-  background: #1e293b;
-  border: 1px dashed #475569;
-  border-radius: 14px;
-  padding: 24px;
+  min-height: 220px;
+  width: 100%;
+
+  background: var(--bg-card);
+  border: 1px dashed rgba(125, 211, 252, 0.32);
+  border-radius: var(--radius-lg);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
   text-align: center;
-  color: #94a3b8;
+  color: var(--text-muted);
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-card);
+}
+
+.voting-history-empty-box h3 {
+  color: var(--text-main);
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.voting-history-empty-box p {
+  color: var(--text-muted);
+  font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  .voting-history-container {
+    padding: 32px 24px;
+  }
+
+  .voting-history-card h1 {
+    font-size: 34px;
+  }
+
+  .voting-history-item {
+    grid-template-columns: 1fr;
+    align-items: flex-start;
+  }
+
+  .voting-history-status {
+    justify-self: start;
+  }
+}
+
+
+.voting-history-back-btn {
+  display: block;
+  text-align: left;
+  color: #38bdf8;
+  margin-bottom: 30px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.voting-history-card h1,
+.voting-history-subtitle {
+  text-align: left;
+}
+
+.voting-history-list {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  gap: 18px;
+}
+
+.voting-history-item {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  align-items: center;
+
+  background: var(--bg-card);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-lg);
+
+  padding: 24px 28px;
+
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(12px);
+}
+
+.voting-history-status {
+  justify-self: end;
+
+  background: rgba(56, 189, 248, 0.16);
+  color: #7dd3fc;
+  border: 1px solid rgba(125, 211, 252, 0.35);
+}
+
+
+.voting-history-container {
+  padding-top: 36px;
+}
+
+.voting-history-back-btn {
+  margin-top: 18px;
+  margin-bottom: 36px;
+}
+
+.voting-history-card h1 {
+  margin-bottom: 6px;
+}
+
+.voting-history-subtitle {
+  margin-bottom: 70px;
+}
+
+.voting-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.voting-history-item {
+  width: 100%;
+  min-height: 120px;
+
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+
+  background: rgba(15, 23, 42, 0.72) !important;
+  border: 1px solid rgba(125, 211, 252, 0.22) !important;
+  border-radius: 22px !important;
+
+  padding: 26px 32px !important;
+
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.24);
+  backdrop-filter: blur(12px);
+}
+
+.voting-history-item h3,
+.voting-history-item p {
+  text-align: left;
+}
+
+.voting-history-status {
+  background: rgba(56, 189, 248, 0.16) !important;
+  color: #7dd3fc !important;
+  border: 1px solid rgba(125, 211, 252, 0.38) !important;
 }

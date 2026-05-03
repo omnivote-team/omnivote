@@ -27,7 +27,7 @@ function VotingHistoryPage() {
   };
 
   return (
-    <div className="voting-history-page">
+    <div className="app-page voting-history-page">
       <UserNavbar />
 
       <div className="voting-history-container">
