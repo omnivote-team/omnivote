@@ -1,37 +1,34 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import UserNavbar from "../components/UserNavbar";
 import API from "../api/api";
 import "./MyApplicationsPage.css";
 
 function MyApplicationsPage() {
   const navigate = useNavigate();
-
+  const location = useLocation();
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchApplications = async () => {
-      try {
-        const token = localStorage.getItem("token");
+useEffect(() => {
+  const fetchApplications = async () => {
+    try {
+      setLoading(true);
 
-        const response = await API.get("/candidate-applications/my-applications", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+      const response = await API.get("/candidate-applications/my-applications");
 
-        setApplications(response.data);
-      } catch (error) {
-        console.log(error);
-        alert("Failed to load applications.");
-      } finally {
-        setLoading(false);
-      }
-    };
+      setApplications(response.data);
+    } catch (error) {
+      console.log(error);
+      alert("Failed to load applications.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchApplications();
-  }, []);
+  fetchApplications();
+}, [location.key]);
+
   console.log(applications);
   return (
     <div className="my-applications-page">
@@ -63,8 +60,13 @@ function MyApplicationsPage() {
                     {application.institution_name}
                     </p>
                     <p>{application.manifesto}</p>
-                    </div>
 
+                    {application.status === "rejected" && application.remarks && (
+                        <p className="application-remarks">
+                          <strong>Admin Remarks:</strong> {application.remarks}
+                        </p>
+                      )}
+                    </div>
                   <span className={`application-status ${application.status}`}>
                     {application.status}
                   </span>

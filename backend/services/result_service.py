@@ -4,6 +4,8 @@ from models.vote_model import Vote
 from models.candidate_model import Candidate
 from models.result_model import Result
 from models.election_model import Election
+from models.user_model import User
+from services.election_status_service import sync_election_status
 
 def generate_results_for_election(db, election):
     if election.status != "closed":
@@ -118,8 +120,41 @@ def view_published_results_service(db, election_id: int):
     if election is None:
         raise HTTPException(status_code=404, detail="Election not found")
 
+    sync_election_status(db, election)
+
+    if election.status == "closed":
+        existing_results = db.query(Result).filter(
+            Result.election_id == election.id
+        ).first()
+
+        if existing_results is None:
+            generate_results_for_election(db, election)
+
+        election.results_published = True
+
+        db.commit()
+        db.refresh(election)
+
     check_results_visible(election)
 
-    return db.query(Result).filter(
-        Result.election_id == election_id
-    ).all()
+    rows = (
+        db.query(Result, Candidate, User)
+        .join(Candidate, Result.candidate_id == Candidate.id)
+        .join(User, Candidate.user_id == User.id)
+        .filter(Result.election_id == election_id)
+        .all()
+    )
+
+    result = []
+
+    for election_result, candidate, user in rows:
+        result.append({
+            "id": election_result.id,
+            "election_id": election_result.election_id,
+            "candidate_id": election_result.candidate_id,
+            "candidate_name": user.full_name,
+            "vote_count": election_result.vote_count,
+            "is_winner": election_result.is_winner
+        })
+
+    return result

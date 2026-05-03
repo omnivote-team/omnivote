@@ -1,37 +1,26 @@
-from fastapi import HTTPException
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 
-def open_election(election):
-    if election.status == "open":
-        raise HTTPException(
-            status_code=400,
-            detail="Election is already open"
-        )
+def compute_status(start_datetime, end_datetime) -> str:
+    now = datetime.now(ZoneInfo("Asia/Karachi")).replace(tzinfo=None)
 
-    if election.status == "closed":
-        raise HTTPException(
-            status_code=400,
-            detail="Closed election cannot be opened again"
-        )
+    if now < start_datetime:
+        return "upcoming"
 
-    election.status = "open"
+    if now >= start_datetime and now <= end_datetime:
+        return "open"
 
-    return True
+    return "closed"
 
 
-def close_election(election):
-    if election.status == "closed":
-        raise HTTPException(
-            status_code=400,
-            detail="Election is already closed"
-        )
+def sync_election_status(db, election):
+    election.status = compute_status(
+        election.start_datetime,
+        election.end_datetime
+    )
 
-    if election.status != "open":
-        raise HTTPException(
-            status_code=400,
-            detail="Only an open election can be closed"
-        )
+    db.commit()
+    db.refresh(election)
 
-    election.status = "closed"
-
-    return True
+    return election

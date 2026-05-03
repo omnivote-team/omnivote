@@ -1,7 +1,7 @@
 from fastapi import HTTPException
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
-
+from services.election_status_service import compute_status,sync_election_status
 from models.vote_model import Vote
 from models.user_model import User
 from models.election_model import Election
@@ -80,6 +80,8 @@ def cast_vote_service(
             detail="Election not found"
         )
 
+    sync_election_status(db, election)
+
     can_vote(user, election)
     check_user_election_eligibility(user, election)
     check_vote_rules(db, user, election, candidate_id)
@@ -105,6 +107,22 @@ def cast_vote_service(
     return new_vote
 
 def get_user_voting_history_service(db: Session, user_id: int):
-    return db.query(Vote).filter(
-        Vote.user_id == user_id
-    ).all()
+    rows = (
+        db.query(Vote, Election)
+        .join(Election, Vote.election_id == Election.id)
+        .filter(Vote.user_id == user_id)
+        .all()
+    )
+
+    result = []
+
+    for vote, election in rows:
+        result.append({
+            "id": vote.id,
+            "election_id": vote.election_id,
+            "election_title": election.title,
+            "candidate_id": vote.candidate_id,
+            "voted_at": None
+        })
+
+    return result

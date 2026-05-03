@@ -14,9 +14,11 @@ function AdminManageElectionPage() {
   const location = useLocation();
   const successMessage = location.state?.successMessage;
 
-  useEffect(() => {
-    loadElections();
-  }, []);
+ useEffect(() => {
+  setLoading(true);
+  setError("");
+  loadElections();
+}, [location.key]);
 
   const loadElections = async () => {
     try {
@@ -120,7 +122,7 @@ function AdminManageElectionPage() {
                       <td className="admin-election-title">{election.title}</td>
                       <td>
                         <span className={`admin-election-status ${getStatusClass(election.status)}`}>
-                          {election.status}
+                          {getStatusLabel(election.status)}
                         </span>
                       </td>
                       <td>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import UserNavbar from "../components/UserNavbar";
 import {
@@ -6,43 +6,61 @@ import {
   Mail,
   CreditCard,
   Building2,
-  CheckCircle2,
   Pencil,
   X,
   Check,
 } from "lucide-react";
-import mockUser from "../data/mockUser";
 import "./UserProfilePage.css";
+import { getMyProfile, updateMyProfile } from "../api/authApi";
+
 
 function UserProfilePage() {
   const navigate = useNavigate();
 
-  const [user, setUser] = useState(mockUser);
+  const [user, setUser] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [editedName, setEditedName] = useState(mockUser.name);
+  const [editedName, setEditedName] = useState("");
   const [saveStatus, setSaveStatus] = useState(null);
 
+    useEffect(() => {
+    loadProfile();
+  }, []);
+
+const loadProfile = async () => {
+  try {
+    const data = await getMyProfile();
+
+    setUser(data);
+    setEditedName(data.full_name);
+  } catch (error) {
+    console.log(error);
+    alert("Failed to load profile.");
+  }
+};
+
   const handleEdit = () => {
-    setEditedName(user.name);
+    setEditedName(user.full_name);
     setIsEditing(true);
     setSaveStatus(null);
   };
 
   const handleCancel = () => {
-    setEditedName(user.name);
+    setEditedName(user.full_name);
     setIsEditing(false);
     setSaveStatus(null);
   };
 
-  const handleSave = () => {
-    const trimmedName = editedName.trim();
+  const handleSave = async () => {
+  const trimmedName = editedName.trim();
 
-    if (!trimmedName) return;
+  if (!trimmedName) return;
 
-    setUser((prevUser) => ({
-      ...prevUser,
-      name: trimmedName,
-    }));
+  try {
+    const updatedUser = await updateMyProfile({
+      full_name: trimmedName,
+    });
+
+    setUser(updatedUser);
 
     setIsEditing(false);
     setSaveStatus("success");
@@ -50,9 +68,17 @@ function UserProfilePage() {
     setTimeout(() => {
       setSaveStatus(null);
     }, 3000);
-  };
 
-  const initials = user.name
+  } catch (error) {
+    console.log(error);
+    alert("Failed to update profile.");
+  }
+};
+
+  if (!user) {
+   return <p>Loading profile...</p>;
+  }
+  const initials = user.full_name
     .split(" ")
     .map((part) => part[0])
     .join("")
@@ -76,20 +102,12 @@ function UserProfilePage() {
               <div className="profile-avatar">{initials}</div>
 
               <div className="profile-identity-text">
-                <h2 className="profile-display-name">{user.name}</h2>
-                <span className="profile-student-id">{user.studentId}</span>
+                <h2 className="profile-display-name">{user.full_name}</h2>
+                <span className="profile-student-id">{user.student_id}</span>
               </div>
             </div>
 
             <div className="profile-divider"></div>
-
-            {user.isVerified && (
-              <div className="profile-verified-badge">
-                <CheckCircle2 size={18} />
-                <span>Verified Voter</span>
-              </div>
-            )}
-
             {saveStatus === "success" && (
               <div className="profile-toast success">
                 <Check size={16} />
@@ -119,7 +137,7 @@ function UserProfilePage() {
                       autoFocus
                     />
                   ) : (
-                    <span className="profile-field-value">{user.name}</span>
+                    <span className="profile-field-value">{user.full_name}</span>
                   )}
                 </div>
               </div>
@@ -139,7 +157,7 @@ function UserProfilePage() {
 
                 <div className="profile-field-input-wrap readonly">
                   <CreditCard size={16} className="profile-field-icon" />
-                  <span className="profile-field-value">{user.studentId}</span>
+                  <span className="profile-field-value">{user.student_id}</span>
                   <span className="profile-readonly-tag">Read only</span>
                 </div>
               </div>
@@ -149,10 +167,46 @@ function UserProfilePage() {
 
                 <div className="profile-field-input-wrap readonly">
                   <Building2 size={16} className="profile-field-icon" />
-                  <span className="profile-field-value">{user.institution}</span>
+                  <span className="profile-field-value">{user.institution_name}</span>
                   <span className="profile-readonly-tag">Read only</span>
                 </div>
               </div>
+                    <div className="profile-field">
+              <label className="profile-field-label">Department</label>
+
+              <div className="profile-field-input-wrap readonly">
+                <Building2 size={16} className="profile-field-icon" />
+                <span className="profile-field-value">
+                  {user.department_name}
+                </span>
+                <span className="profile-readonly-tag">Read only</span>
+              </div>
+            </div>
+
+            <div className="profile-field">
+              <label className="profile-field-label">Batch</label>
+
+              <div className="profile-field-input-wrap readonly">
+                <Building2 size={16} className="profile-field-icon" />
+                <span className="profile-field-value">
+                  {user.batch_name}
+                </span>
+                <span className="profile-readonly-tag">Read only</span>
+              </div>
+            </div>
+
+            <div className="profile-field">
+              <label className="profile-field-label">Section</label>
+
+              <div className="profile-field-input-wrap readonly">
+                <Building2 size={16} className="profile-field-icon" />
+                <span className="profile-field-value">
+                  {user.section_name}
+                </span>
+                <span className="profile-readonly-tag">Read only</span>
+              </div>
+            </div>
+
             </div>
 
             <div className="profile-divider"></div>
@@ -169,7 +223,7 @@ function UserProfilePage() {
                     className="profile-btn save"
                     onClick={handleSave}
                     disabled={
-                      !editedName.trim() || editedName.trim() === user.name
+                      !editedName.trim() || editedName.trim() === user.full_name
                     }
                   >
                     <Check size={16} />

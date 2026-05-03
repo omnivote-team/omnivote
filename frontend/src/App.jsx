@@ -17,6 +17,7 @@ import AdminManageElectionPage from "./pages/AdminManageElectionPage";
 import AdminElectionDetailsPage from "./pages/AdminElectionDetailsPage";
 import CreateElectionPage from "./pages/CreateElectionPage";
 import AdminEditElectionPage from "./pages/AdminEditElectionPage";
+import VotingHistoryPage from "./pages/VotingHistoryPage";
 import "./App.css"
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
         <Route path="/apply-candidate" element={<ApplyAsCandidate />} />
         <Route path="/vote/:id" element={<VotePage />} />
         <Route path="/my-applications" element={<MyApplicationsPage />} />
+        <Route path="/history" element={<VotingHistoryPage />} />
         <Route path="/admin-dashboard" element={<AdminDashboardPage />} />
         <Route path="/admin-applications" element={<AdminApplicationsPage />} />
         <Route path="/admin-applications/:id" element={<AdminApplicationDetailsPage />} />

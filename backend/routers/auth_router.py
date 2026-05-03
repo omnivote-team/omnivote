@@ -2,7 +2,12 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
 from database import get_db
-from schemas.user_schema import UserSignup, UserLogin
+from schemas.user_schema import (
+    UserSignup,
+    UserLogin,
+    UserProfileResponse,
+    UserProfileUpdate
+)
 from models.user_model import User
 from services.password_service import hash_password, verify_password
 from models.institution_model import Institution
@@ -153,3 +158,95 @@ def login_for_access_token(
 @router.get("/me")
 def get_me(current_user=Depends(get_current_user_data)):
     return {"message": "Token is valid", "current_user": current_user}
+
+
+
+@router.get("/me/profile", response_model=UserProfileResponse)
+def get_my_profile(
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user_data)
+):
+    user = db.query(User).filter(
+        User.id == current_user["user_id"]
+    ).first()
+
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    institution = db.query(Institution).filter(
+        Institution.id == user.institution_id
+    ).first()
+
+    department = db.query(Department).filter(
+        Department.id == user.department_id
+    ).first()
+
+    batch = db.query(Batch).filter(
+        Batch.id == user.batch_id
+    ).first()
+
+    section = db.query(Section).filter(
+        Section.id == user.section_id
+    ).first()
+
+    return {
+        "id": user.id,
+        "full_name": user.full_name,
+        "email": user.email,
+        "student_id": user.student_id,
+        "institution_name": institution.name if institution else None,
+        "department_name": department.name if department else None,
+        "batch_name": batch.name if batch else None,
+        "section_name": section.name if section else None,
+        "role": user.role
+    }
+
+
+@router.put("/me/profile", response_model=UserProfileResponse)
+def update_my_profile(
+    profile_data: UserProfileUpdate,
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user_data)
+):
+    user = db.query(User).filter(
+        User.id == current_user["user_id"]
+    ).first()
+
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    if not profile_data.full_name.strip():
+        raise HTTPException(status_code=400, detail="Full name is required")
+
+    user.full_name = profile_data.full_name.strip()
+
+    db.commit()
+    db.refresh(user)
+
+    institution = db.query(Institution).filter(
+        Institution.id == user.institution_id
+    ).first()
+
+    department = db.query(Department).filter(
+        Department.id == user.department_id
+    ).first()
+
+    batch = db.query(Batch).filter(
+        Batch.id == user.batch_id
+    ).first()
+
+    section = db.query(Section).filter(
+        Section.id == user.section_id
+    ).first()
+
+    return {
+        "id": user.id,
+        "full_name": user.full_name,
+        "email": user.email,
+        "student_id": user.student_id,
+        "institution_name": institution.name if institution else None,
+        "department_name": department.name if department else None,
+        "batch_name": batch.name if batch else None,
+        "section_name": section.name if section else None,
+        "role": user.role
+    }

@@ -14,8 +14,6 @@ from services.election_service import (
     create_election_service,
     get_admin_election_details_service,
     get_admin_election_list_service,
-    open_election_service,
-    close_election_service,
     delete_election_service,
     update_election_service
 )
@@ -69,24 +67,6 @@ def update_election(
         election_id=election_id,
         election_data=election
     )
-
-@router.put("/{election_id}/open")
-def open_election_route(
-    election_id: int,
-    db: Session = Depends(get_db),
-    current_admin=Depends(require_admin)
-):
-    return open_election_service(db=db, election_id=election_id)
-
-
-@router.put("/{election_id}/close")
-def close_election_route(
-    election_id: int,
-    db: Session = Depends(get_db),
-    current_admin=Depends(require_admin)
-):
-    return close_election_service(db=db, election_id=election_id)
-
 
 @router.delete("/{election_id}")
 def delete_election(

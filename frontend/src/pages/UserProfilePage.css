@@ -225,3 +225,9 @@
   background: rgba(56, 189, 248, 0.10);
   color: #f8fbff;
 }
+
+.voting-history-empty {
+  color: #94a3b8;
+  font-size: 14px;
+  padding: 14px 0;
+}

@@ -4,7 +4,7 @@ import { getAdminElections } from "../api/electionApi";
 import { decideCandidateApplication } from "../api/candidateApplicationApi";
 import AdminNavbar from "../components/AdminNavbar";
 import "./AdminApplicationsPage.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 
 function AdminApplicationsPage() {
@@ -16,10 +16,11 @@ function AdminApplicationsPage() {
   const [selectedApplicationId, setSelectedApplicationId] = useState(null);
   const [remarks, setRemarks] = useState("");
   const navigate = useNavigate();
-useEffect(() => {
-  loadApplications();
-  loadElections();
-}, [selectedStatus, selectedElectionId]);
+  const location = useLocation();
+  useEffect(() => {
+    loadApplications();
+    loadElections();
+  }, [selectedStatus, selectedElectionId, location.key]);
 
     const loadElections = async () => {
   try {

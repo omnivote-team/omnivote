@@ -20,16 +20,6 @@ export const deleteElection = async (electionId) => {
   return response.data;
 };
 
-export const openElection = async (electionId) => {
-  const response = await API.put(`/admin/elections/${electionId}/open`);
-  return response.data;
-};
-
-export const closeElection = async (electionId) => {
-  const response = await API.put(`/admin/elections/${electionId}/close`);
-  return response.data;
-};
-
 export const updateElection = async (electionId, data) => {
   const response = await API.put(`/admin/elections/${electionId}`, data);
   return response.data;

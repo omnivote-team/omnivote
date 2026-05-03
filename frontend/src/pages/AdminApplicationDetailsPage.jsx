@@ -79,7 +79,11 @@ const handleReject = async () => {
       <div className="application-details-card">
         <button
             className="back-button"
-            onClick={() => navigate("/admin-applications")}
+            onClick={() =>
+              navigate("/admin-applications", {
+                state: { refresh: Date.now() },
+              })
+            }
             >
             ← Back to Applications
         </button>

@@ -8,6 +8,7 @@ from models.candidate_application_model import CandidateApplication
 from models.candidate_model import Candidate
 from models.user_model import User
 from models.election_model import Election
+from services.election_status_service import compute_status,sync_election_status
 
 from models.department_model import Department
 from models.batch_model import Batch
@@ -43,6 +44,8 @@ def decide_application(db: Session, application_id: int, status: str, remarks: s
             status_code=404,
             detail="Election not found"
         )
+    
+    sync_election_status(db, election)
 
     if election.status != "upcoming":
         raise HTTPException(
@@ -233,6 +236,13 @@ def create_candidate_application(
             status_code=404,
             detail="Election not found"
         )
+    sync_election_status(db, election)
+
+    if election.status != "upcoming":
+        raise HTTPException(
+            status_code=400,
+            detail="Applications are only allowed for upcoming elections"
+        )
 
     user = db.query(User).filter(
         User.id == user_id
@@ -370,3 +380,54 @@ def get_admin_application_details_service(db: Session, application_id: int):
         "updated_at": application.updated_at,
         "reviewed_at": application.reviewed_at
     }
+
+def get_eligible_elections_for_application(db: Session, user_id: int):
+    user = db.query(User).filter(User.id == user_id).first()
+
+    if user is None:
+        raise HTTPException(
+            status_code=404,
+            detail="User not found"
+        )
+
+    elections = db.query(Election).all()
+
+    eligible_elections = []
+
+    for election in elections:
+        sync_election_status(db, election)
+
+        if election.status != "upcoming":
+            continue
+
+        try:
+            can_apply_as_candidate(user, election)
+            check_user_election_eligibility(user, election)
+
+            existing_application = db.query(CandidateApplication).filter(
+                CandidateApplication.election_id == election.id,
+                CandidateApplication.user_id == user.id,
+                CandidateApplication.status.in_(["pending", "approved"])
+            ).first()
+
+            if existing_application is not None:
+                continue
+
+            eligible_elections.append({
+                "id": election.id,
+                "title": election.title,
+                "description": election.description,
+                "election_type": election.election_type,
+                "status": election.status,
+                "start_datetime": election.start_datetime,
+                "end_datetime": election.end_datetime,
+                "institution_id": election.institution_id,
+                "department_id": election.department_id,
+                "batch_id": election.batch_id,
+                "section_id": election.section_id
+            })
+
+        except HTTPException:
+            continue
+
+    return eligible_elections

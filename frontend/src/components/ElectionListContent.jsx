@@ -31,12 +31,18 @@ function ElectionListContent({ onViewDetails }) {
   }, []);
 
   const organizations = [
-    ...new Set(elections.map((election) => election.organization).filter(Boolean)),
-  ];
+  ...new Set(
+    elections.map((election) => election.institution_name).filter(Boolean)
+  ),
+];
 
-  const categories = [
-    ...new Set(elections.map((election) => election.category).filter(Boolean)),
-  ];
+const categories = [
+  ...new Set(
+    elections.map((election) => election.election_type).filter(Boolean)
+  ),
+];
+
+console.log("categories:", categories);
 
   const filteredElections = elections.filter((election) => {
     const electionStatus = election.status?.toLowerCase();
@@ -57,12 +63,12 @@ function ElectionListContent({ onViewDetails }) {
       .includes(searchTerm.toLowerCase());
 
     const matchesOrganization =
-      selectedOrganization === "" ||
-      election.organization === selectedOrganization;
+    selectedOrganization === "" ||
+    election.institution_name === selectedOrganization;
 
     const matchesCategory =
-      selectedCategory === "" || election.category === selectedCategory;
-
+    selectedCategory === "" ||
+    election.election_type === selectedCategory;
     return matchesTab && matchesSearch && matchesOrganization && matchesCategory;
   });
 

@@ -1,6 +1,5 @@
 import API from "./api";
 
-
 export const getAdminCandidateApplications = async (filters = {}) => {
   const response = await API.get("/candidate-applications/admin/filter", {
     params: filters,
@@ -8,7 +7,6 @@ export const getAdminCandidateApplications = async (filters = {}) => {
 
   return response.data;
 };
-
 
 export const decideCandidateApplication = async (
   applicationId,
@@ -19,5 +17,15 @@ export const decideCandidateApplication = async (
     decisionData
   );
 
+  return response.data;
+};
+
+export const getEligibleElectionsForApplication = async () => {
+  const response = await API.get("/candidate-applications/eligible-elections");
+  return response.data;
+};
+
+export const createCandidateApplication = async (applicationData) => {
+  const response = await API.post("/candidate-applications/", applicationData);
   return response.data;
 };

@@ -34,6 +34,7 @@ class PublicElectionResponse(BaseModel):
     end_datetime: datetime
     institution_id: int
     institution_name: Optional[str] = None
+    election_type: str
 
     class Config:
         from_attributes = True

@@ -2,11 +2,11 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import UserNavbar from "../components/UserNavbar";
 import CandidateFormHeader from "../components/CandidateFormHeader";
-import ElectionDropdown from "../components/ElectionDropdown";
+import EligibleElectionDropdown from "../components/EligibleElectionDropdown";
 import CandidateFormFields from "../components/CandidateFormFields";
 import CandidateFormNote from "../components/CandidateFormNote";
 import "./ApplyAsCandidate.css";
-import API from "../api/api";
+import { createCandidateApplication } from "../api/candidateApplicationApi";
 
 const ApplyAsCandidate = () => {
   const navigate = useNavigate();
@@ -29,18 +29,10 @@ const ApplyAsCandidate = () => {
     try {
       const token = localStorage.getItem("token");
 
-      await API.post(
-        "/candidate-applications/",
-        {
+      await createCandidateApplication({
           election_id: Number(selectedElection),
           manifesto: formData.manifesto,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+        });
 
       alert("Candidate application submitted successfully.");
       navigate("/dashboard");
@@ -58,7 +50,7 @@ const ApplyAsCandidate = () => {
         <CandidateFormHeader onBack={() => navigate("/dashboard")} />
 
         <div className="apply-candidate-card">
-          <ElectionDropdown
+          <EligibleElectionDropdown
             value={selectedElection}
             onChange={setSelectedElection}
           />

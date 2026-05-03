@@ -231,3 +231,14 @@
 .dashboard-empty-election p {
   color: #cbd5e1;
 }
+
+
+.winner-badge {
+  background: rgba(34, 197, 94, 0.15);
+  color: #86efac;
+  border: 1px solid rgba(34, 197, 94, 0.35);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+}

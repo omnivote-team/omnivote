@@ -161,3 +161,24 @@
   font-weight: 600;
   margin-bottom: 8px;
 }
+
+.application-remarks {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(248, 113, 113, 0.35);
+  color: #fecaca;
+  font-size: 14px;
+  line-height: 1.5;
+  max-width: 420px;
+}
+
+.application-remarks strong {
+  display: block;
+  margin-bottom: 4px;
+  color: #f87171;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}

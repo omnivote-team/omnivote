@@ -1,5 +1,6 @@
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
+from sqlalchemy import or_, and_
 
 from models.election_model import Election
 from models.institution_model import Institution
@@ -12,19 +13,11 @@ from models.vote_model import Vote
 from models.result_model import Result
 from models.user_model import User
 from sqlalchemy import or_, and_
-from services.election_status_service import open_election, close_election
-from datetime import datetime, timezone
-
-def compute_status(start_datetime, end_datetime) -> str:
-    now = datetime.now(timezone.utc).replace(tzinfo=None)
-
-    if now < start_datetime:
-        return "upcoming"
-
-    if now >= start_datetime and now <= end_datetime:
-        return "open"
-
-    return "closed"
+from services.election_status_service import (
+    compute_status,
+    sync_election_status
+)
+from services.result_service import generate_results_for_election
 
 def validate_election_references(db: Session, election):
     institution = db.query(Institution).filter(
@@ -177,6 +170,7 @@ def create_election_service(db: Session, election, admin_id: int):
         title=election.title,
         description=election.description,
         election_type=election.election_type,
+        status=compute_status(election.start_datetime, election.end_datetime),
         start_datetime=election.start_datetime,
         end_datetime=election.end_datetime,
         institution_id=institution_id,
@@ -301,7 +295,19 @@ def get_admin_election_details_service(db: Session, election_id: int):
             status_code=404,
             detail="Election not found"
         )
-    
+    sync_election_status(db, election)
+    if election.status == "closed":
+        existing_results = db.query(Result).filter(
+            Result.election_id == election.id
+        ).first()
+
+        if existing_results is None:
+            generate_results_for_election(db, election)
+
+        election.results_published = True
+
+    db.commit()
+    db.refresh(election)
     institution = None
     department = None
     batch = None
@@ -327,17 +333,47 @@ def get_admin_election_details_service(db: Session, election_id: int):
             Section.id == election.section_id
         ).first()
 
-    candidates = db.query(Candidate).filter(
-        Candidate.election_id == election_id
-    ).all()
+    candidate_rows = (
+    db.query(Candidate, User)
+    .join(User, Candidate.user_id == User.id)
+    .filter(Candidate.election_id == election_id)
+    .all()
+)
 
-    applications = db.query(CandidateApplication).filter(
+    candidates = []
+
+    for candidate, user in candidate_rows:
+        candidates.append({
+            "id": candidate.id,
+            "election_id": candidate.election_id,
+            "user_id": candidate.user_id,
+            "application_id": candidate.application_id,
+            "candidate_name": user.full_name
+        })
+
+        applications = db.query(CandidateApplication).filter(
         CandidateApplication.election_id == election_id
     ).all()
 
-    results = db.query(Result).filter(
-        Result.election_id == election_id
-    ).all()
+    result_rows = (
+    db.query(Result, Candidate, User)
+    .join(Candidate, Result.candidate_id == Candidate.id)
+    .join(User, Candidate.user_id == User.id)
+    .filter(Result.election_id == election_id)
+    .all()
+)
+
+    results = []
+
+    for election_result, candidate, user in result_rows:
+        results.append({
+            "id": election_result.id,
+            "election_id": election_result.election_id,
+            "candidate_id": election_result.candidate_id,
+            "candidate_name": user.full_name,
+            "vote_count": election_result.vote_count,
+            "is_winner": election_result.is_winner
+        })
 
     total_votes = db.query(Vote).filter(
         Vote.election_id == election_id
@@ -348,7 +384,7 @@ def get_admin_election_details_service(db: Session, election_id: int):
         "title": election.title,
         "description": election.description,
         "election_type": election.election_type,
-        "status": compute_status(election.start_datetime, election.end_datetime),
+        "status": election.status,
         "results_published": election.results_published,
         "start_datetime": election.start_datetime,
         "end_datetime": election.end_datetime,
@@ -369,60 +405,24 @@ def get_admin_election_details_service(db: Session, election_id: int):
         "section_name": section.name if section else None,
     }
 
-
-from services.election_status_service import open_election, close_election
-
-
-def open_election_service(db: Session, election_id: int):
-    election = db.query(Election).filter(
-        Election.id == election_id
-    ).first()
-
-    if election is None:
-        raise HTTPException(status_code=404, detail="Election not found")
-
-    open_election(election)
-
-    db.commit()
-    db.refresh(election)
-
-    return {
-        "message": "Election opened successfully",
-        "election_id": election.id,
-        "status": election.status
-    }
-
-
-def close_election_service(db: Session, election_id: int):
-    election = db.query(Election).filter(
-        Election.id == election_id
-    ).first()
-
-    if election is None:
-        raise HTTPException(status_code=404, detail="Election not found")
-
-    close_election(election)
-
-    db.commit()
-    db.refresh(election)
-
-    return {
-        "message": "Election closed successfully",
-        "election_id": election.id,
-        "status": election.status
-    }
-
 def get_admin_election_list_service(db: Session):
     elections = db.query(Election).all()
 
     result = []
 
     for election in elections:
+        election.status = compute_status(
+            election.start_datetime,
+            election.end_datetime
+        )
+
         result.append({
             "id": election.id,
             "title": election.title,
-            "status": compute_status(election.start_datetime, election.end_datetime)
+            "status": election.status
         })
+
+    db.commit()
 
     return result
 
@@ -437,16 +437,13 @@ def delete_election_service(db: Session, election_id: int):
             detail="Election not found"
         )
 
-    status = compute_status(
-        election.start_datetime,
-        election.end_datetime
-    )
+    sync_election_status(db, election)
 
-    if status != "upcoming":
-        raise HTTPException(
-            status_code=400,
-            detail="Only upcoming elections can be deleted"
-        )
+    if election.status != "upcoming":
+            raise HTTPException(
+                status_code=400,
+                detail="Only upcoming elections can be deleted"
+            )
 
     # delete related records first
 
@@ -485,12 +482,9 @@ def update_election_service(db: Session, election_id: int, election_data):
             detail="Election not found"
         )
 
-    status = compute_status(
-        election.start_datetime,
-        election.end_datetime
-    )
+    sync_election_status(db, election)
 
-    if status != "upcoming":
+    if election.status != "upcoming":
         raise HTTPException(
             status_code=400,
             detail="Only upcoming elections can be edited"
@@ -543,13 +537,14 @@ def update_election_service(db: Session, election_id: int, election_data):
     deleted_candidates_count = 0
 
     for application in applications:
+
         user = db.query(User).filter(
             User.id == application.user_id
         ).first()
 
         if user is None or not user_matches_election_eligibility(user, election):
 
-            candidates_to_delete = db.query(Candidate).filter(
+            candidates = db.query(Candidate).filter(
                 or_(
                     Candidate.application_id == application.id,
                     and_(
@@ -559,15 +554,7 @@ def update_election_service(db: Session, election_id: int, election_data):
                 )
             ).all()
 
-            for candidate in candidates_to_delete:
-                db.query(Vote).filter(
-                    Vote.candidate_id == candidate.id
-                ).delete(synchronize_session=False)
-
-                db.query(Result).filter(
-                    Result.candidate_id == candidate.id
-                ).delete(synchronize_session=False)
-
+            for candidate in candidates:
                 db.delete(candidate)
                 deleted_candidates_count += 1
 
@@ -575,9 +562,9 @@ def update_election_service(db: Session, election_id: int, election_data):
 
             db.delete(application)
             deleted_applications_count += 1
+
     db.commit()
     db.refresh(election)
-
 
     return {
         "message": "Election updated successfully",
@@ -585,7 +572,6 @@ def update_election_service(db: Session, election_id: int, election_data):
         "deleted_applications_count": deleted_applications_count,
         "deleted_candidates_count": deleted_candidates_count
     }
-
 def user_matches_election_eligibility(user, election):
     if election.institution_id is not None:
         if user.institution_id != election.institution_id:

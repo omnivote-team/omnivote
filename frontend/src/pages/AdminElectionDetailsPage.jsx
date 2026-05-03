@@ -49,7 +49,7 @@ function AdminElectionDetailsPage() {
         if (status === "closed") return "Closed";
         return status;
     };
-  const showVotes = ["open", "ongoing", "past"].includes(election?.status);
+  const showVotes = ["open", "closed"].includes(election?.status);
 
   // Merge candidate with its manifesto and result
   const enrichedCandidates = election
@@ -200,7 +200,7 @@ function AdminElectionDetailsPage() {
                   <div className="candidate-info">
                     <div className="candidate-info-header">
                       <span className="candidate-name">
-                        Candidate #{c.user_id}
+                        {c.candidate_name || `Candidate #${c.user_id}`}
                       </span>
                       {showVotes && c.vote_count !== undefined && (
                         <div className="candidate-votes">

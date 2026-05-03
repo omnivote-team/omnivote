@@ -1,6 +1,7 @@
 # user_election_service.py
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
+from services.election_status_service import compute_status,sync_election_status
 
 from models.election_model import Election
 from models.candidate_model import Candidate
@@ -8,6 +9,7 @@ from models.institution_model import Institution
 from models.user_model import User
 from models.candidate_application_model import CandidateApplication
 from services.authorization_service import can_view_full_election
+from services.eligibility_service import check_user_election_eligibility
 
 
 def get_full_election_details_service(db: Session, election_id: int, current_user):
@@ -22,10 +24,23 @@ def get_full_election_details_service(db: Session, election_id: int, current_use
             status_code=404,
             detail="Election not found"
         )
+    sync_election_status(db, election)
 
-    institution = db.query(Institution).filter(
-        Institution.id == election.institution_id
+    user = db.query(User).filter(
+    User.id == current_user["user_id"]
     ).first()
+
+    if user is None:
+        raise HTTPException(
+            status_code=404,
+            detail="User not found"
+        )
+
+    check_user_election_eligibility(user, election)
+    
+    institution = db.query(Institution).filter(
+            Institution.id == election.institution_id
+        ).first()
 
     candidates = (
         db.query(Candidate, User, CandidateApplication)

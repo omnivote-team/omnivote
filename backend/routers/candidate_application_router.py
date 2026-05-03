@@ -13,7 +13,8 @@ from services.candidate_application_service import (
     get_admin_application_details_service,
     get_applications_by_status_service,
     get_applications_by_election_service,
-    get_user_applications_service
+    get_user_applications_service,
+    get_eligible_elections_for_application
 )
 
 from schemas.candidate_application_schema import (
@@ -74,6 +75,18 @@ def filter_admin_applications(
         db=db,
         election_id=election_id,
         status=status
+    )
+
+
+
+@router.get("/eligible-elections")
+def get_eligible_elections(
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user_data)
+):
+    return get_eligible_elections_for_application(
+        db=db,
+        user_id=current_user["user_id"]
     )
 
 @router.get(

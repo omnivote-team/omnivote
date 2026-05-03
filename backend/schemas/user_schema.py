@@ -33,3 +33,22 @@ class UserResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class UserProfileResponse(BaseModel):
+    id: int
+    full_name: str
+    email: EmailStr
+    student_id: str
+    institution_name: str | None = None
+    department_name: str | None = None
+    batch_name: str | None = None
+    section_name: str | None = None
+    role: str
+
+    class Config:
+        from_attributes = True
+
+
+class UserProfileUpdate(BaseModel):
+    full_name: str

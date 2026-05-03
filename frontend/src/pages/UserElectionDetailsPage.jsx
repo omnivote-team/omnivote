@@ -9,7 +9,10 @@ function UserElectionDetailsPage() {
   const navigate = useNavigate();
 
   const [election, setElection] = useState(null);
+  const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState("");
+  
 
   const formatDate = (dateValue) => {
     if (!dateValue) return "N/A";
@@ -34,9 +37,25 @@ function UserElectionDetailsPage() {
 
         console.log(response.data);
         setElection(response.data);
-      } catch (error) {
+        if (response.data.status === "closed") {
+          const resultResponse = await API.get(`/results/election/${id}`);
+
+          setResults(resultResponse.data);
+        }
+     } catch (error) {
         console.log(error);
-        alert("Failed to load election details.");
+
+        if (error.response?.status === 403) {
+          setErrorMessage("You are not eligible to vote in this election.");
+
+          setTimeout(() => {
+            navigate("/dashboard");
+          }, 2000);
+
+          return;
+        }
+
+        setErrorMessage("Failed to load election details.");
       } finally {
         setLoading(false);
       }
@@ -45,16 +64,19 @@ function UserElectionDetailsPage() {
     fetchElectionDetails();
   }, [id]);
 
-  if (loading) {
-    return (
-      <>
-        <UserNavbar />
-        <div className="election-details-page">
-          <h1>Loading election details...</h1>
+ if (loading || errorMessage) {
+  return (
+    <>
+      <UserNavbar />
+      <div className="election-details-page">
+        <div className="details-main-card">
+          <h1>{errorMessage || "Loading election details..."}</h1>
+          {errorMessage && <p>Redirecting you back to dashboard...</p>}
         </div>
-      </>
-    );
-  }
+      </div>
+    </>
+  );
+}
 
   if (!election) {
     return (
@@ -151,15 +173,43 @@ function UserElectionDetailsPage() {
               )}
             </div>
           </section>
+                {election.status === "closed" && results.length > 0 && (
+              <section className="details-main-card">
+                <h2>Election Results</h2>
+
+                <div className="candidate-details-list">
+                  {results.map((result) => (
+                    <div className="candidate-details-card" key={result.id}>
+                      <div>
+                        <h3>{result.candidate_name || `Candidate ID: ${result.candidate_id}`}</h3>
+                        <p>{result.vote_count} votes</p>
+                      </div>
+
+                      {result.is_winner && (
+                        <span className="winner-badge">
+                          Winner
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
 
           <div className="vote-button-container">
-            <button
+            {election.status === "open" ? (
+                <button
                 className="vote-now-btn"
                 onClick={() => navigate(`/vote/${election.id}`)}
                 >
-            Vote Now
-            </button>
-          </div>
+                Vote Now
+                </button>
+            ) : (
+                <p className="vote-closed-message">
+                Election is not open for voting right now.
+                </p>
+            )}
+            </div>
         </div>
       </div>
     </>

@@ -8,7 +8,7 @@ from services.vote_service import (
     get_user_voting_history_service
 )
 
-from schemas.vote_schema import VoteCreate, VoteResponse
+from schemas.vote_schema import VoteCreate, VoteResponse, VoteHistoryResponse
 
 
 router = APIRouter(
@@ -31,7 +31,7 @@ def cast_vote(
     )
 
 
-@router.get("/my-history", response_model=list[VoteResponse])
+@router.get("/my-history", response_model=list[VoteHistoryResponse])
 def get_my_voting_history(
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user_data)
